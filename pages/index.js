@@ -54,7 +54,7 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="flex px-24 bg-primary items-center md:px-9 md:flex-col md:py-10 md:grid-cols-1 lg:items-end lg:px-9 lg:grid lg:grid-cols-2">
+        <div className="flex px-24 md:bg-primary md:via-transparent bg-gradient-to-r from-primary via-purple-500 items-center md:px-9 md:flex-col md:py-10 md:grid-cols-1 lg:items-end lg:px-9 lg:grid lg:grid-cols-2">
           <div className="text-white flex-1 lg:mb-10">
             <h1 className="text-6xl font-semibold md:text-4xl lg:text-4xl">
               Awesome App
