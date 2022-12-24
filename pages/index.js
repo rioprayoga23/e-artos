@@ -12,26 +12,26 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="tripleXl:px-[450px]">
-        <div className="flex py-6 bg-primary px-24 items-center md:px-9 lg:px-9">
+      <main className="3xl:px-[450px]">
+        <div className="flex py-6 bg-primary px-24 items-center md:px-5 lg:px-9">
           <Link href="/" className="flex-1 text-2xl text-white font-semibold">
             E-Artos
           </Link>
           <div className="flex gap-5 md:hidden">
             <Link
-              href="/"
+              href="/login"
               className="w-24 py-1 btn btn-primary text-white text-center font-semibold"
             >
               Login
             </Link>
             <Link
-              href="/"
+              href="/sign-up"
               className="w-24 py-1 btn bg-white hover:bg-white text-primary text-center font-semibold"
             >
               Sign Up
             </Link>
           </div>
-          <div className="md:block xxl:hidden">
+          <div className="md:block hidden">
             <div className="dropdown dropdown-end">
               <div
                 tabIndex={0}

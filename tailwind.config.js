@@ -18,8 +18,8 @@ module.exports = {
       },
     },
     screens: {
-      tripleXl: { min: "1441px" },
-      xxl: { max: "1440px" },
+      "3xl": { min: "1441px" },
+      "2xl": { max: "1440px" },
 
       xl: { max: "1279px" },
 
