@@ -20,7 +20,7 @@ export default function Home() {
           <div className="flex gap-5 md:hidden">
             <Link
               href="/login"
-              className="w-24 py-1 btn btn-primary text-white text-center font-semibold"
+              className="w-24 py-1 btn bg-purple-500 hover:bg-purple-600 text-white text-center font-semibold"
             >
               Login
             </Link>
@@ -44,10 +44,10 @@ export default function Home() {
                 className="dropdown-content menu p-2 mt-1 shadow bg-base-100 rounded-box w-52"
               >
                 <li>
-                  <Link href="/">Login</Link>
+                  <Link href="/login">Login</Link>
                 </li>
                 <li>
-                  <Link href="/">Sign Up</Link>
+                  <Link href="/sign-up">Sign Up</Link>
                 </li>
               </ul>
             </div>
