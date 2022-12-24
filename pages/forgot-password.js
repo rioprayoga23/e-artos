@@ -6,7 +6,7 @@ const ForgotPassword = () => {
   return (
     <MainLayoutAuth title="Forgot Password">
       <>
-        <article className="flex w-[40%] md:w-full lg:h-screen lg:overflow-scroll lg:w-full">
+        <article className="flex w-[40%] md:w-full lg:w-full">
           <div className="px-20 pt-16 md:px-9 lg:px-24 xl:py-10">
             <h1 className="text-2xl font-semibold mb-6 hidden lg:block">
               Forgot Password

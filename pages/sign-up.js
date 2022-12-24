@@ -13,9 +13,9 @@ export default function SignUp() {
   return (
     <MainLayoutAuth title="SignUp">
       <>
-        <article className="flex w-[40%] md:w-full h-screen overflow-y-scroll md:px-0 lg:w-full">
-          <div className="px-20 py-20 md:px-9 lg:px-24 xl:py-10">
-            <h1 className="text-2xl font-semibold mb-6 hidden md:block">
+        <article className="flex w-[40%] md:w-full md:px-0 lg:w-full">
+          <div className="px-20 py-20 md:px-9 lg:px-24 xl:py-10 h-screen overflow-y-scroll lg:h-auto lg:overflow-auto">
+            <h1 className="text-2xl font-semibold mb-6 hidden lg:block">
               Sign Up
             </h1>
             <h1 className="text-2xl font-semibold mb-6">

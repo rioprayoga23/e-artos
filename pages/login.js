@@ -13,7 +13,7 @@ export default function Login() {
   return (
     <MainLayoutAuth title="Login">
       <>
-        <article className="flex w-[40%] md:w-full lg:h-screen lg:overflow-scroll lg:w-full">
+        <article className="flex w-[40%] md:w-full lg:w-full">
           <div className="px-20 pt-16 md:px-9 lg:px-24 xl:pt-6">
             <h1 className="text-2xl font-semibold mb-6 hidden lg:block">
               Login
