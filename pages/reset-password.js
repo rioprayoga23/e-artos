@@ -13,9 +13,9 @@ export default function ResetPassword() {
   return (
     <MainLayoutAuth title="Reset Password">
       <>
-        <article className="flex w-[40%] md:w-full lg:h-screen lg:overflow-scroll">
-          <div className="px-20 pt-16 h-fit md:px-9 lg:px-9 xl:py-10">
-            <h1 className="text-2xl font-semibold mb-6 hidden md:block">
+        <article className="flex w-[40%] md:w-full lg:h-screen lg:overflow-scroll lg:w-full">
+          <div className="px-20 pt-16 md:px-9 lg:px-24 xl:py-10">
+            <h1 className="text-2xl font-semibold mb-6 hidden lg:block">
               Update Password
             </h1>
             <h1 className="text-2xl font-semibold mb-6">
@@ -70,9 +70,11 @@ export default function ResetPassword() {
               )}
             </div>
 
-            <button className="btn bg-primary w-full mt-10 hover:bg-primary">
-              Reset Password
-            </button>
+            <div className="pb-10">
+              <button className="btn bg-primary w-full mt-10 hover:bg-primary">
+                Reset Password
+              </button>
+            </div>
           </div>
         </article>
       </>

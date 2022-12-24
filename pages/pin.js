@@ -3,14 +3,14 @@ import { Check } from "react-feather";
 import MainLayoutAuth from "../components/layouts/MainLayoutAuth";
 
 export default function Pin() {
-  const [succes, setSuccess] = useState(false);
+  const [succes, setSuccess] = useState(true);
   return (
     <MainLayoutAuth title="Pin">
       <>
         {!succes ? (
-          <article className="flex w-[40%] md:w-full">
-            <div className="px-20 pt-16 h-fit md:px-9 lg:px-9 xl:py-10 xl:px-16">
-              <h1 className="text-2xl font-semibold mb-6 hidden md:block">
+          <article className="flex w-[40%] md:w-full lg:w-full">
+            <div className="px-20 pt-16 md:px-9 lg:px-32 xl:py-10 xl:px-16">
+              <h1 className="text-2xl font-semibold mb-6 hidden lg:block">
                 Create Pin
               </h1>
               <h1 className="text-2xl font-semibold mb-6">
@@ -66,8 +66,8 @@ export default function Pin() {
             </div>
           </article>
         ) : (
-          <article className="flex w-[40%] md:w-full">
-            <div className="px-20 pt-16 md:px-9 lg:px-9">
+          <article className="flex w-[40%] lg:w-full justify-center">
+            <div className="px-20 pt-16 md:px-9 lg:px-32">
               <div className="p-4 bg-success rounded-full w-fit">
                 <Check size="30px" color="white" />
               </div>

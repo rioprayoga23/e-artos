@@ -13,9 +13,9 @@ export default function Login() {
   return (
     <MainLayoutAuth title="Login">
       <>
-        <article className="flex w-[40%] md:w-full lg:h-screen lg:overflow-scroll">
-          <div className="px-20 pt-16 h-fit md:px-9 lg:px-9 xl:py-10">
-            <h1 className="text-2xl font-semibold mb-6 hidden md:block">
+        <article className="flex w-[40%] md:w-full lg:h-screen lg:overflow-scroll lg:w-full">
+          <div className="px-20 pt-16 md:px-9 lg:px-24 xl:pt-6">
+            <h1 className="text-2xl font-semibold mb-6 hidden lg:block">
               Login
             </h1>
             <h1 className="text-2xl font-semibold mb-6">
@@ -66,7 +66,7 @@ export default function Login() {
               Login
             </button>
 
-            <div className="text-center mt-5">
+            <div className="text-center mt-5 pb-10">
               Don’t have an account?
               <Link href="/sign-up" className="text-primary">
                 Let’s Sign Up
