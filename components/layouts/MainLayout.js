@@ -1,8 +1,8 @@
 import Link from "next/link";
 import React from "react";
 import { Grid, ArrowUp, Plus, User, LogOut } from "react-feather";
-import Footer from "./Footer";
-import Navbar from "./Navbar";
+import Footer from "../Footer";
+import Navbar from "../Navbar";
 
 const MainLayout = ({ children }) => {
   return (
