@@ -48,7 +48,7 @@ const MainLayout = ({ children }) => {
           </aside>
 
           {/* Content */}
-          {children}
+          <section className="w-[85%] md:w-full">{children}</section>
         </main>
       </div>
       <Footer />
