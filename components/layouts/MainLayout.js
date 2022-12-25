@@ -7,9 +7,9 @@ import Navbar from "./Navbar";
 const MainLayout = ({ children }) => {
   return (
     <div className="flex flex-col min-h-screen">
-      <div className="flex-grow">
+      <div className="flex-grow bg-third">
         <Navbar />
-        <main className="bg-third px-24 flex py-10 lg:px-9 3xl:px-[450px] gap-5 md:px-5">
+        <main className="px-24 flex py-10 lg:px-9 3xl:px-[450px] gap-5 md:px-5">
           <aside className="w-[25%] md:hidden">
             <div className="bg-white rounded-lg px-7 py-10 flex flex-col h-full shadow-md lg:h-[450px]">
               <div className="flex-1 flex flex-col gap-10">

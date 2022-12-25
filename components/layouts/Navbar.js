@@ -5,7 +5,7 @@ import { Bell, Menu } from "react-feather";
 const Navbar = () => {
   return (
     <nav>
-      <div className="flex px-24 py-7 md:py-5 items-center md:px-5 lg:px-9 3xl:px-[450px]">
+      <div className="flex px-24 py-7 md:py-5 items-center md:px-5 lg:px-9 3xl:px-[450px] bg-white">
         <h1 className="flex-1 text-primary font-semibold text-2xl">
           <Link href="/">E-Artos</Link>
         </h1>
