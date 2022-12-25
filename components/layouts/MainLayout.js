@@ -26,10 +26,12 @@ const MainLayout = ({ children }) => {
                   <Link href="/home">Transfer</Link>
                 </div>
                 <div className="flex gap-5">
-                  <Link href="/home">
+                  <label htmlFor="my-modal-4" className="cursor-pointer">
                     <Plus />
-                  </Link>
-                  <Link href="/home">Top Up</Link>
+                  </label>
+                  <label htmlFor="my-modal-4" className="cursor-pointer">
+                    Top Up
+                  </label>
                 </div>
                 <div className="flex gap-5">
                   <Link href="/home">
@@ -49,6 +51,27 @@ const MainLayout = ({ children }) => {
 
           {/* Content */}
           <section className="w-[85%] md:w-full">{children}</section>
+
+          <input type="checkbox" id="my-modal-4" className="modal-toggle" />
+          <label
+            htmlFor="my-modal-4"
+            className="modal md:modal-bottom cursor-pointer"
+          >
+            <label className="modal-box relative" htmlFor="">
+              <h3 className="text-lg font-bold">Topup</h3>
+              <p className="py-4">
+                Enter the amount of money, and click submit
+              </p>
+              <div className="px-24 py-5 border-2 flex items-center justify-center rounded-lg">
+                <input type="text" className="border-b-2 outline-none" />
+              </div>
+              <div className="flex justify-end mt-10">
+                <div className="btn bg-primary hover:bg-primary cursor-pointer px-10">
+                  Submit
+                </div>
+              </div>
+            </label>
+          </label>
         </main>
       </div>
       <Footer />

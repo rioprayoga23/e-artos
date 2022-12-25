@@ -51,7 +51,7 @@ const Navbar = () => {
               <Link href="/">Transfer</Link>
             </li>
             <li>
-              <Link href="/">Top Up</Link>
+              <label htmlFor="my-modal-4">Top Up</label>
             </li>
             <li>
               <Link href="/">Notifications</Link>
@@ -62,6 +62,25 @@ const Navbar = () => {
           </ul>
         </div>
       </div>
+
+      <input type="checkbox" id="my-modal-4" className="modal-toggle" />
+      <label
+        htmlFor="my-modal-4"
+        className="modal md:modal-bottom cursor-pointer"
+      >
+        <label className="modal-box relative" htmlFor="">
+          <h3 className="text-lg font-bold">Topup</h3>
+          <p className="py-4">Enter the amount of money, and click submit</p>
+          <div className="px-24 py-5 border-2 flex items-center justify-center rounded-lg">
+            <input type="text" className="border-b-2 outline-none" />
+          </div>
+          <div className="flex justify-end mt-10">
+            <div className="btn bg-primary hover:bg-primary cursor-pointer px-10">
+              Submit
+            </div>
+          </div>
+        </label>
+      </label>
     </nav>
   );
 };
