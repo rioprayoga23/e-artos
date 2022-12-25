@@ -24,7 +24,7 @@ const amount = () => {
             </div>
           </div>
         </div>
-        <div className="w-[40%] py-10">
+        <div className="w-[40%] py-10 md:w-full lg:w-[80%]">
           <p className="text-[#7A7886]">
             Type the amount you want to transfer and then press continue to the
             next steps.
@@ -49,7 +49,9 @@ const amount = () => {
           </div>
         </div>
         <div className="flex justify-end">
-          <div className="btn bg-primary hover:bg-primary px-6">Continue</div>
+          <div className="btn bg-primary hover:bg-primary px-6 md:w-full">
+            Continue
+          </div>
         </div>
       </div>
     </MainLayout>
