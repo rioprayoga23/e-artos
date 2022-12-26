@@ -27,13 +27,13 @@ const profile = () => {
               <ArrowRight />
             </div>
           </Link>
-          <Link href="/personal-info">
+          <Link href="/change-password">
             <div className="bg-[#E5E8ED] w-96 md:w-full p-4 rounded-lg shadow-sm flex justify-between items-center">
               <p>Change Password</p>
               <ArrowRight />
             </div>
           </Link>
-          <Link href="/personal-info">
+          <Link href="/change-pin">
             <div className="bg-[#E5E8ED] w-96 md:w-full p-4 rounded-lg shadow-sm flex justify-between items-center">
               <p>Change PIN</p>
               <ArrowRight />
