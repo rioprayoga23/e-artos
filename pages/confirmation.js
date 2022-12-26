@@ -54,16 +54,20 @@ const confirmation = () => {
         <div className="flex justify-end mt-10">
           <label
             className="btn bg-primary hover:bg-primary px-6 md:w-full"
-            htmlFor="my-modal-4"
+            htmlFor="pin-confirmation-modal"
           >
             Continue
           </label>
         </div>
       </div>
 
-      <input type="checkbox" id="my-modal-4" className="modal-toggle" />
+      <input
+        type="checkbox"
+        id="pin-confirmation-modal"
+        className="modal-toggle"
+      />
       <label
-        htmlFor="my-modal-4"
+        htmlFor="pin-confirmation-modal"
         className="modal md:modal-bottom cursor-pointer"
       >
         <label className="modal-box relative" htmlFor="">
@@ -76,37 +80,37 @@ const confirmation = () => {
             <div className="border px-2 pt-4 md:pt-2 pb-2 rounded-md w-full">
               <input
                 type="text"
-                className="border-b focus:outline-none w-full"
+                className="border-b focus:outline-none w-full text-2xl text-center"
               />
             </div>
             <div className="border px-2 pt-4 md:pt-2 pb-2 rounded-md w-full">
               <input
                 type="text"
-                className="border-b focus:outline-none w-full"
+                className="border-b focus:outline-none w-full text-2xl text-center"
               />
             </div>
             <div className="border px-2 pt-4 md:pt-2 pb-2 rounded-md w-full">
               <input
                 type="text"
-                className="border-b focus:outline-none w-full"
+                className="border-b focus:outline-none w-full text-2xl text-center"
               />
             </div>
             <div className="border px-2 pt-4 md:pt-2 pb-2 rounded-md w-full">
               <input
                 type="text"
-                className="border-b focus:outline-none w-full"
+                className="border-b focus:outline-none w-full text-2xl text-center"
               />
             </div>
             <div className="border px-2 pt-4 md:pt-2 pb-2 rounded-md w-full">
               <input
                 type="text"
-                className="border-b focus:outline-none w-full"
+                className="border-b focus:outline-none w-full text-2xl text-center"
               />
             </div>
             <div className="border px-2 pt-4 md:pt-2 pb-2 rounded-md w-full">
               <input
                 type="text"
-                className="border-b focus:outline-none w-full"
+                className="border-b focus:outline-none w-full text-2xl text-center"
               />
             </div>
           </div>

@@ -3,7 +3,7 @@ import { Check } from "react-feather";
 import MainLayoutAuth from "../components/layouts/MainLayoutAuth";
 
 export default function Pin() {
-  const [succes, setSuccess] = useState(true);
+  const [succes, setSuccess] = useState(false);
   return (
     <MainLayoutAuth title="Pin">
       <>
@@ -26,37 +26,37 @@ export default function Pin() {
                 <div className="border px-2 pt-4 md:pt-2 pb-2 rounded-md w-full">
                   <input
                     type="text"
-                    className="border-b focus:outline-none w-full"
+                    className="border-b focus:outline-none w-full text-2xl text-center"
                   />
                 </div>
                 <div className="border px-2 pt-4 md:pt-2 pb-2 rounded-md w-full">
                   <input
                     type="text"
-                    className="border-b focus:outline-none w-full"
+                    className="border-b focus:outline-none w-full text-2xl text-center"
                   />
                 </div>
                 <div className="border px-2 pt-4 md:pt-2 pb-2 rounded-md w-full">
                   <input
                     type="text"
-                    className="border-b focus:outline-none w-full"
+                    className="border-b focus:outline-none w-full text-2xl text-center"
                   />
                 </div>
                 <div className="border px-2 pt-4 md:pt-2 pb-2 rounded-md w-full">
                   <input
                     type="text"
-                    className="border-b focus:outline-none w-full"
+                    className="border-b focus:outline-none w-full text-2xl text-center"
                   />
                 </div>
                 <div className="border px-2 pt-4 md:pt-2 pb-2 rounded-md w-full">
                   <input
                     type="text"
-                    className="border-b focus:outline-none w-full"
+                    className="border-b focus:outline-none w-full text-2xl text-center"
                   />
                 </div>
                 <div className="border px-2 pt-4 md:pt-2 pb-2 rounded-md w-full">
                   <input
                     type="text"
-                    className="border-b focus:outline-none w-full"
+                    className="border-b focus:outline-none w-full text-2xl text-center"
                   />
                 </div>
               </div>
