@@ -13,7 +13,7 @@ const ManagePhoneNumber = () => {
             transfering your money to another user.
           </p>
         </div>
-        <div className="px-48 pb-40 mt-20">
+        <div className="px-48 pb-40 mt-20 md:px-0 md:pb-10 lg:px-9">
           <div className="relative mt-14">
             <Phone className="absolute" style={{ color: "#A9A9A999" }} />
             <input

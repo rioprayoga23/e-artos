@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Check, Download } from "react-feather";
+import { Download } from "react-feather";
 import MainLayout from "../components/layouts/MainLayout";
 import StatusFailed from "../components/status-failed";
 import StatusSuccess from "../components/status-success";
