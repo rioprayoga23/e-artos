@@ -59,7 +59,7 @@ const Navbar = () => {
               <Link href="/notifications">Notifications</Link>
             </li>
             <li>
-              <Link href="/">Profile</Link>
+              <Link href="/profile">Profile</Link>
             </li>
           </ul>
         </div>
