@@ -51,7 +51,9 @@ const Navbar = () => {
               <Link href="/">Transfer</Link>
             </li>
             <li>
-              <label htmlFor="my-modal-4">Top Up</label>
+              <label htmlFor="my-modal-4" className="cursor-pointer">
+                Top Up
+              </label>
             </li>
             <li>
               <Link href="/">Notifications</Link>
