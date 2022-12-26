@@ -13,10 +13,13 @@
     "daisyui": "^2.46.0",
     "eslint": "8.30.0",
     "eslint-config-next": "13.1.0",
+    "formik": "^2.2.9",
     "next": "13.1.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "react-feather": "^2.0.10"
+    "react-feather": "^2.0.10",
+    "yup": "^0.32.11",
+    "yup-password": "^0.2.2"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.13",
