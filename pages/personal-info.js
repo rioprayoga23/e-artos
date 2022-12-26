@@ -37,7 +37,7 @@ const PersonalInfo = () => {
               <p className="text-sm">Phone Number</p>
               <h3 className="font-semibold">+62 813-9387-7946</h3>
             </div>
-            <Link href="/" className="text-purple-600">
+            <Link href="/manage-phone-number" className="text-purple-600">
               Manage
             </Link>
           </div>
