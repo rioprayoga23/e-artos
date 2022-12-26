@@ -11,7 +11,7 @@ const MainLayout = ({ children }) => {
         <Navbar />
         <main className="px-24 flex py-10 lg:px-9 3xl:px-[450px] gap-5 md:px-5">
           <aside className="w-[25%] md:hidden">
-            <div className="bg-white rounded-lg px-7 py-10 flex flex-col h-full shadow-md lg:h-[450px]">
+            <div className="bg-white rounded-lg px-7 py-10 flex flex-col shadow-md lg:h-[450px] h-full">
               <div className="flex-1 flex flex-col gap-10">
                 <div className="flex gap-5">
                   <Link href="/home">
@@ -20,10 +20,10 @@ const MainLayout = ({ children }) => {
                   <Link href="/home">Dashboard</Link>
                 </div>
                 <div className="flex gap-5">
-                  <Link href="/home">
+                  <Link href="/receiver">
                     <ArrowUp />
                   </Link>
-                  <Link href="/home">Transfer</Link>
+                  <Link href="/reciever">Transfer</Link>
                 </div>
                 <div className="flex gap-5">
                   <label htmlFor="my-modal-4" className="cursor-pointer">
@@ -34,10 +34,10 @@ const MainLayout = ({ children }) => {
                   </label>
                 </div>
                 <div className="flex gap-5">
-                  <Link href="/home">
+                  <Link href="/profile">
                     <User />
                   </Link>
-                  <Link href="/home">Profile</Link>
+                  <Link href="/profile">Profile</Link>
                 </div>
               </div>
               <div>

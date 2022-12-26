@@ -1,6 +1,7 @@
 import Link from "next/link";
 import React from "react";
-import { Bell, Menu } from "react-feather";
+import { ArrowDown, ArrowUp, Bell, Menu } from "react-feather";
+import ItemNotification from "./ItemNotification";
 
 const Navbar = () => {
   return (
@@ -11,7 +12,9 @@ const Navbar = () => {
         </h1>
         <div className="flex items-center gap-7 md:hidden">
           <div className="flex items-center gap-3">
-            <img src="img/profile3.png" alt="" />
+            <Link href="/profile">
+              <img src="img/profile3.png" alt="" />
+            </Link>
             <div>
               <h3 className="text-lg font-semibold">Robert Chandler</h3>
               <p>+62 8139 3877 7946</p>
@@ -22,14 +25,11 @@ const Navbar = () => {
               <Bell className="cursor-pointer" tabIndex={0} />
               <ul
                 tabIndex={0}
-                className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52 mt-7"
+                className="dropdown-content menu p-5 shadow bg-base-100 rounded-box w-96 mt-7 flex flex-col gap-5"
               >
-                <li>
-                  <a>Item 1</a>
-                </li>
-                <li>
-                  <a>Item 2</a>
-                </li>
+                <ItemNotification />
+                <ItemNotification />
+                <ItemNotification />
               </ul>
             </div>
           </div>
@@ -45,10 +45,10 @@ const Navbar = () => {
             className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52"
           >
             <li>
-              <Link href="/MainLayout">Dashboard</Link>
+              <Link href="/home">Dashboard</Link>
             </li>
             <li>
-              <Link href="/">Transfer</Link>
+              <Link href="/reciever">Transfer</Link>
             </li>
             <li>
               <label htmlFor="my-modal-4" className="cursor-pointer">
@@ -56,7 +56,7 @@ const Navbar = () => {
               </label>
             </li>
             <li>
-              <Link href="/">Notifications</Link>
+              <Link href="/notifications">Notifications</Link>
             </li>
             <li>
               <Link href="/">Profile</Link>
