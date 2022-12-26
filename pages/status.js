@@ -4,7 +4,7 @@ import MainLayout from "../components/layouts/MainLayout";
 import StatusFailed from "../components/status-failed";
 import StatusSuccess from "../components/status-success";
 
-const status = () => {
+const Status = () => {
   const [success, setSuccess] = useState(false);
 
   return (
@@ -78,4 +78,4 @@ const status = () => {
   );
 };
 
-export default status;
+export default Status;
