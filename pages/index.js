@@ -2,8 +2,10 @@ import Head from "next/head";
 import Link from "next/link";
 import React from "react";
 import { Phone, Lock, Download, Menu } from "react-feather";
+import { useSelector } from "react-redux";
 
 export default function Home() {
+  const token = useSelector((state) => state.auth.token);
   return (
     <>
       <Head>
@@ -17,20 +19,32 @@ export default function Home() {
           <Link href="/" className="flex-1 text-2xl text-white font-semibold">
             E-Artos
           </Link>
-          <div className="flex gap-5 md:hidden">
-            <Link
-              href="/login"
-              className="w-24 py-1 btn bg-purple-500 hover:bg-purple-600 text-white text-center font-semibold"
-            >
-              Login
-            </Link>
-            <Link
-              href="/sign-up"
-              className="w-24 py-1 btn bg-white hover:bg-white text-primary text-center font-semibold"
-            >
-              Sign Up
-            </Link>
-          </div>
+          {!token ? (
+            <div className="flex gap-5 md:hidden">
+              <Link
+                href="/login"
+                className="w-24 py-1 btn bg-purple-500 hover:bg-purple-600 text-white text-center font-semibold"
+              >
+                Login
+              </Link>
+              <Link
+                href="/sign-up"
+                className="w-24 py-1 btn bg-white hover:bg-white text-primary text-center font-semibold"
+              >
+                Sign Up
+              </Link>
+            </div>
+          ) : (
+            <div className="flex gap-5 md:hidden">
+              <Link
+                href="/home"
+                className="px-7 py-1 btn bg-purple-500 hover:bg-purple-600 text-white text-center font-semibold"
+              >
+                Dashboard
+              </Link>
+            </div>
+          )}
+
           <div className="md:block hidden">
             <div className="dropdown dropdown-end">
               <div
@@ -43,12 +57,22 @@ export default function Home() {
                 tabIndex={0}
                 className="dropdown-content menu p-2 mt-1 shadow bg-base-100 rounded-box w-52"
               >
-                <li>
-                  <Link href="/login">Login</Link>
-                </li>
-                <li>
-                  <Link href="/sign-up">Sign Up</Link>
-                </li>
+                {!token ? (
+                  <div>
+                    <li>
+                      <Link href="/login">Login</Link>
+                    </li>
+                    <li>
+                      <Link href="/sign-up">Sign Up</Link>
+                    </li>
+                  </div>
+                ) : (
+                  <div>
+                    <li>
+                      <Link href="/home">Dashboard</Link>
+                    </li>
+                  </div>
+                )}
               </ul>
             </div>
           </div>

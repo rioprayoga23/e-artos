@@ -2,8 +2,11 @@ import React from "react";
 import MainLayout from "../components/layouts/MainLayout";
 import { ArrowUp, ArrowDown, Plus } from "react-feather";
 import Link from "next/link";
+import { useSelector } from "react-redux";
 
 const HomePage = () => {
+  const token = useSelector((state) => state.auth.token);
+
   return (
     <MainLayout>
       <div className="bg-primary p-5 shadow-md rounded-lg flex text-white md:flex-col md:w-full">
@@ -13,10 +16,13 @@ const HomePage = () => {
           <p className="font-base">+62 813-9387-7946</p>
         </div>
         <div className="grid grid-rows-2 gap-3 md:mt-10 md:grid-cols-2 md:grid-rows-1">
-          <div className="flex gap-2 p-3 w-32 bg-purple-400 rounded-md items-center cursor-pointer md:w-full justify-center">
-            <ArrowUp color="white" />
-            <p>Transfer</p>
-          </div>
+          <Link href="/receiver">
+            <div className="flex gap-2 p-3 w-32 bg-purple-400 rounded-md items-center cursor-pointer md:w-full justify-center">
+              <ArrowUp color="white" />
+              <p>Transfer</p>
+            </div>
+          </Link>
+
           <div className="flex gap-2 p-3 w-32 bg-purple-400 rounded-md items-center cursor-pointer md:w-full justify-center">
             <Plus color="white" />
             <p>Top Up</p>

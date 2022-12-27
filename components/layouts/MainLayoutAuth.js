@@ -12,8 +12,8 @@ const MainLayoutAuth = ({ title, children }) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="flex 3xl:px-[450px]">
-        <article className="flex w-[60%] lg:hidden">
-          <div className="px-24  md:bg-primary md:via-transparent bg-gradient-to-r from-primary to-purple-500 text-white lg:px-9 lg:h-screen h-screen flex flex-col justify-center">
+        <article className="flex w-[60%] lg:hidden h-screen">
+          <div className="px-24 md:bg-primary md:via-transparent bg-gradient-to-r from-primary to-purple-500 text-white lg:px-9 lg:h-screen flex flex-col justify-center">
             <Link href="/">
               <h1 className="text-2xl font-semibold">E-Artos</h1>
             </Link>

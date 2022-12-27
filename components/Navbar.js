@@ -1,9 +1,34 @@
 import Link from "next/link";
-import React from "react";
-import { ArrowDown, ArrowUp, Bell, Menu } from "react-feather";
+import React, { useEffect, useState } from "react";
+import { Bell, Menu } from "react-feather";
+import { useDispatch, useSelector } from "react-redux";
 import ItemNotification from "./ItemNotification";
+import http from "../helpers/http";
+import { logout } from "../redux/reducers/auth";
+import Router from "next/router";
+
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 const Navbar = () => {
+  const [userData, setUserData] = useState();
+  const token = useSelector((state) => state.auth.token);
+
+  const dispatch = useDispatch();
+  const doLogout = () => {
+    dispatch(logout());
+    Router.push("/login");
+  };
+
+  const getCurrentUser = async () => {
+    const { data } = await http(token).get("/profile");
+    setUserData(data.results);
+  };
+
+  useEffect(() => {
+    getCurrentUser();
+  }, []);
+
   return (
     <nav>
       <div className="flex px-24 py-7 md:py-5 items-center md:px-5 lg:px-9 3xl:px-[450px] bg-white">
@@ -15,9 +40,11 @@ const Navbar = () => {
             <Link href="/profile">
               <img src="img/profile3.png" alt="" />
             </Link>
-            <div>
-              <h3 className="text-lg font-semibold">Robert Chandler</h3>
-              <p>+62 8139 3877 7946</p>
+            <div className="w-28">
+              <h3 className="text-lg font-semibold">
+                {userData?.firstName || <Skeleton />}
+              </h3>
+              <p>{userData?.phoneNumber || <Skeleton />}</p>
             </div>
           </div>
           <div>
@@ -60,6 +87,9 @@ const Navbar = () => {
             </li>
             <li>
               <Link href="/profile">Profile</Link>
+            </li>
+            <li>
+              <div onClick={doLogout}>Logout</div>
             </li>
           </ul>
         </div>
