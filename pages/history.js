@@ -1,8 +1,46 @@
+import jwtDecode from "jwt-decode";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import MainLayout from "../components/layouts/MainLayout";
+import http from "../helpers/http";
 
 const history = () => {
+  const token = useSelector((state) => state.auth.token);
+  const [userData, setUserData] = useState();
+  const [transactionsData, setTransactionsData] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const decoded = jwtDecode(token);
+
+  const getTransactions = async () => {
+    const { data } = await http(token).get(
+      `/transactions?page=${currentPage}&limit=5`
+    );
+    setTransactionsData(data.results);
+  };
+
+  const getCurrentUser = async () => {
+    const { data } = await http(token).get("/profile");
+    setUserData(data.results);
+  };
+
+  const handlePrev = () => {
+    setCurrentPage(currentPage - 1);
+  };
+  const handleNext = () => {
+    setCurrentPage(currentPage + 1);
+  };
+
+  useEffect(() => {
+    getTransactions();
+  }, [currentPage]);
+
+  useEffect(() => {
+    getCurrentUser();
+    getTransactions();
+  }, []);
+
   return (
     <MainLayout>
       <div className="bg-white p-5 rounded-lg shadow-md w-full">
@@ -29,63 +67,94 @@ const history = () => {
           </div>
         </div>
         <div className="flex flex-col gap-5">
-          <div className="flex justify-between items-center">
-            <div className="flex gap-3 items-center">
-              <img
-                src="img/profile3.png"
-                alt=""
-                className="h-[56px] w-[56px]"
-              />
-              <div>
-                <h3 className="font-semibold">Samuel Suhi</h3>
-                <p className="text-sm">Accept</p>
+          {transactionsData?.map((data) => {
+            return (
+              <div className="flex justify-between items-center" key={data.id}>
+                <div className="flex gap-3 items-center">
+                  {data.recipientId === decoded.id &&
+                    data.senderId === null && (
+                      <div>
+                        {data?.recipientPicture ? (
+                          <img
+                            src={`https://68xkph-8888.preview.csb.app/upload/${data?.recipientPicture}`}
+                            alt=""
+                            className="h-[56px] w-[56px]"
+                          />
+                        ) : (
+                          <div className="h-[56px] w-[56px] bg-gray-200"></div>
+                        )}
+                      </div>
+                    )}
+                  {data.recipientId !== decoded.id && (
+                    <div>
+                      {data?.recipientPicture ? (
+                        <img
+                          src={`https://68xkph-8888.preview.csb.app/upload/${data?.recipientPicture}`}
+                          alt=""
+                          className="h-[56px] w-[56px]"
+                        />
+                      ) : (
+                        <div className="h-[56px] w-[56px] bg-gray-200"></div>
+                      )}
+                    </div>
+                  )}
+                  {data.recipientId === decoded.id &&
+                    data.senderId !== null && (
+                      <div>
+                        {data?.senderPicture ? (
+                          <img
+                            src={`https://68xkph-8888.preview.csb.app/upload/${data?.senderPicture}`}
+                            alt=""
+                            className="h-[56px] w-[56px]"
+                          />
+                        ) : (
+                          <div className="h-[56px] w-[56px] bg-gray-200"></div>
+                        )}
+                      </div>
+                    )}
+                  <div>
+                    <h3 className="font-semibold">{data.recipientname}</h3>
+                    <p className="text-sm">{data.notes}</p>
+                  </div>
+                </div>
+                <h3
+                  className={`font-semibold ${
+                    data.recipientId === decoded.id
+                      ? "text-green-600"
+                      : "text-red-500"
+                  } `}
+                >
+                  Rp{data.amount}
+                </h3>
               </div>
-            </div>
-            <h3 className="font-semibold text-green-600">+Rp50.000</h3>
-          </div>
-          <div className="flex justify-between items-center">
-            <div className="flex gap-3 items-center">
-              <img
-                src="img/logo-netflix.png"
-                alt=""
-                className="h-[56px] w-[56px]"
-              />
-              <div>
-                <h3 className="font-semibold">Netflix</h3>
-                <p className="text-sm">Transfer</p>
-              </div>
-            </div>
-            <h3 className="font-semibold text-red-500">+Rp50.000</h3>
-          </div>
-          <div className="flex justify-between items-center">
-            <div className="flex gap-3 items-center">
-              <img
-                src="img/profile3.png"
-                alt=""
-                className="h-[56px] w-[56px]"
-              />
-              <div>
-                <h3 className="font-semibold">Samuel Suhi</h3>
-                <p className="text-sm">Accept</p>
-              </div>
-            </div>
-            <h3 className="font-semibold text-green-600">+Rp50.000</h3>
-          </div>
-          <div className="flex justify-between items-center">
-            <div className="flex gap-3 items-center">
-              <img
-                src="img/logo-netflix.png"
-                alt=""
-                className="h-[56px] w-[56px]"
-              />
-              <div>
-                <h3 className="font-semibold">Netflix</h3>
-                <p className="text-sm">Transfer</p>
-              </div>
-            </div>
-            <h3 className="font-semibold text-red-500">+Rp50.000</h3>
-          </div>
+            );
+          })}
         </div>
+      </div>
+      <div className="btn-group grid grid-cols-2 mt-5">
+        {currentPage > 1 ? (
+          <button
+            className="btn bg-primary hover:bg-primary"
+            onClick={handlePrev}
+          >
+            Previous page
+          </button>
+        ) : (
+          <button
+            disabled={true}
+            className="btn btn-outline"
+            onClick={handlePrev}
+          >
+            Previous page
+          </button>
+        )}
+
+        <button
+          className="btn bg-primary hover:bg-primary"
+          onClick={handleNext}
+        >
+          Next
+        </button>
       </div>
     </MainLayout>
   );

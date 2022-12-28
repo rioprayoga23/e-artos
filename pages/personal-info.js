@@ -59,7 +59,7 @@ const PersonalInfo = () => {
             <div className="w-[60%]">
               <div className="flex-1">
                 <p className="text-sm">Phone Number</p>
-                {userData?.phoneNumber !== "undefined" ? (
+                {userData?.phoneNumber ? (
                   <h3 className="font-semibold">
                     {userData?.phoneNumber || <Skeleton />}
                   </h3>

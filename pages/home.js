@@ -4,10 +4,20 @@ import { ArrowUp, ArrowDown, Plus } from "react-feather";
 import Link from "next/link";
 import { useSelector } from "react-redux";
 import http from "../helpers/http";
+import WithAuth from "../components/HOC/WithAuth";
+import jwtDecode from "jwt-decode";
 
 const HomePage = () => {
-  const [userData, setUserData] = useState();
   const token = useSelector((state) => state.auth.token);
+  const [userData, setUserData] = useState();
+  const [transactionsData, setTransactionsData] = useState([]);
+
+  const decoded = jwtDecode(token);
+
+  const getTransactions = async () => {
+    const { data } = await http(token).get("/transactions?page=1&limit=5");
+    setTransactionsData(data.results);
+  };
 
   const getCurrentUser = async () => {
     const { data } = await http(token).get("/profile");
@@ -16,6 +26,7 @@ const HomePage = () => {
 
   useEffect(() => {
     getCurrentUser();
+    getTransactions();
   }, []);
 
   return (
@@ -63,67 +74,58 @@ const HomePage = () => {
         <div className="bg-white p-5 mt-5 rounded-lg shadow-md w-[45%] lg:w-full">
           <div className="flex justify-between mb-10">
             <h3 className="font-semibold">Transaction History</h3>
-            <Link href="/" className="text-primary font-semibold">
+            <Link href="/history" className="text-primary font-semibold">
               See all
             </Link>
           </div>
           <div className="flex flex-col gap-5">
-            <div className="flex justify-between items-center">
-              <div className="flex gap-3 items-center">
-                <img
-                  src="img/profile3.png"
-                  alt=""
-                  className="h-[56px] w-[56px]"
-                />
-                <div>
-                  <h3 className="font-semibold">Samuel Suhi</h3>
-                  <p className="text-sm">Accept</p>
+            {transactionsData?.map((data) => {
+              return (
+                <div
+                  className="flex justify-between items-center"
+                  key={data.id}
+                >
+                  <div className="flex gap-3 items-center">
+                    {data.recipientId === decoded.id &&
+                      data.senderId === null && (
+                        <img
+                          src={`https://68xkph-8888.preview.csb.app/upload/${data?.recipientPicture}`}
+                          alt=""
+                          className="h-[56px] w-[56px]"
+                        />
+                      )}
+                    {data.recipientId !== decoded.id && (
+                      <img
+                        src={`https://68xkph-8888.preview.csb.app/upload/${data?.recipientPicture}`}
+                        alt=""
+                        className="h-[56px] w-[56px]"
+                      />
+                    )}
+                    {data.recipientId === decoded.id &&
+                      data.senderId !== null && (
+                        <img
+                          src={`https://68xkph-8888.preview.csb.app/upload/${data?.senderPicture}`}
+                          alt=""
+                          className="h-[56px] w-[56px]"
+                        />
+                      )}
+                    <div>
+                      <h3 className="font-semibold">{data.recipientname}</h3>
+                      <p className="text-sm">{data.notes}</p>
+                    </div>
+                  </div>
+                  <h3
+                    className={`font-semibold ${
+                      data.recipientId === decoded.id
+                        ? "text-green-600"
+                        : "text-red-500"
+                    } `}
+                  >
+                    Rp{data.amount}
+                  </h3>
                 </div>
-              </div>
-              <h3 className="font-semibold text-green-600">+Rp50.000</h3>
-            </div>
-            <div className="flex justify-between items-center">
-              <div className="flex gap-3 items-center">
-                <img
-                  src="img/logo-netflix.png"
-                  alt=""
-                  className="h-[56px] w-[56px]"
-                />
-                <div>
-                  <h3 className="font-semibold">Netflix</h3>
-                  <p className="text-sm">Transfer</p>
-                </div>
-              </div>
-              <h3 className="font-semibold text-red-500">+Rp50.000</h3>
-            </div>
-            <div className="flex justify-between items-center">
-              <div className="flex gap-3 items-center">
-                <img
-                  src="img/profile3.png"
-                  alt=""
-                  className="h-[56px] w-[56px]"
-                />
-                <div>
-                  <h3 className="font-semibold">Samuel Suhi</h3>
-                  <p className="text-sm">Accept</p>
-                </div>
-              </div>
-              <h3 className="font-semibold text-green-600">+Rp50.000</h3>
-            </div>
-            <div className="flex justify-between items-center">
-              <div className="flex gap-3 items-center">
-                <img
-                  src="img/logo-netflix.png"
-                  alt=""
-                  className="h-[56px] w-[56px]"
-                />
-                <div>
-                  <h3 className="font-semibold">Netflix</h3>
-                  <p className="text-sm">Transfer</p>
-                </div>
-              </div>
-              <h3 className="font-semibold text-red-500">+Rp50.000</h3>
-            </div>
+              );
+            })}
           </div>
         </div>
       </div>
@@ -131,4 +133,4 @@ const HomePage = () => {
   );
 };
 
-export default HomePage;
+export default WithAuth(HomePage);

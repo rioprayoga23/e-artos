@@ -86,9 +86,13 @@ const profile = () => {
         </div>
 
         <div className="w-44 text-center">
-          <h1 className="text-[#7A7886]">
-            {userData?.phoneNumber || <Skeleton />}
-          </h1>
+          {userData?.phoneNumber ? (
+            <h1 className="text-[#7A7886]">
+              {userData?.phoneNumber || <Skeleton />}
+            </h1>
+          ) : (
+            <h1 className="text-[#7A7886]">{userData?.phoneNumber}</h1>
+          )}
         </div>
 
         <div className="text-[#4D4B57] font-semibold text-lg md:text-base mt-16 flex flex-col gap-5">

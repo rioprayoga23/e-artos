@@ -25,6 +25,7 @@ const topUpSchema = Yup.object().shape({
 
 const Navbar = () => {
   const [userData, setUserData] = useState();
+  const [notification, setNotification] = useState([]);
   const [message, setMessage] = useState("");
   const router = useRouter();
 
@@ -41,6 +42,13 @@ const Navbar = () => {
     setUserData(data.results);
   };
 
+  const getNotifications = async () => {
+    const { data } = await http(token).get(
+      "/transactions/notification?page=1&limit=5"
+    );
+    setNotification(data.results);
+  };
+
   const doTopUp = async (value) => {
     const form = new URLSearchParams({
       amount: value.amount,
@@ -55,6 +63,7 @@ const Navbar = () => {
   };
 
   useEffect(() => {
+    getNotifications();
     getCurrentUser();
   }, []);
 
@@ -67,18 +76,20 @@ const Navbar = () => {
         <div className="flex items-center gap-7 md:hidden">
           <div className="flex items-center gap-3">
             {userData?.picture ? (
-              <img
-                src={`https://68xkph-8888.preview.csb.app/upload/${userData?.picture}`}
-                alt=""
-                className="w-[60px] h-[60px] rounded-lg"
-              />
+              <Link href="/profile">
+                <img
+                  src={`https://68xkph-8888.preview.csb.app/upload/${userData?.picture}`}
+                  alt=""
+                  className="w-[60px] h-[60px] rounded-lg"
+                />
+              </Link>
             ) : (
               <div className="w-[60px] h-[60px] rounded-lg bg-gray-200"></div>
             )}
             <div className="w-28">
               {
                 <div>
-                  {userData?.phoneNumber != "undefined" ? (
+                  {userData?.phoneNumber ? (
                     <div>
                       <h3 className="text-lg font-semibold">
                         {userData?.firstName || <Skeleton />}
@@ -104,9 +115,9 @@ const Navbar = () => {
                 tabIndex={0}
                 className="dropdown-content menu p-5 shadow bg-base-100 rounded-box w-96 mt-7 flex flex-col gap-5"
               >
-                <ItemNotification />
-                <ItemNotification />
-                <ItemNotification />
+                {notification?.map((data) => {
+                  return <ItemNotification data={data} key={data.id} />;
+                })}
               </ul>
             </div>
           </div>

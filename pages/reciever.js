@@ -11,12 +11,13 @@ const reciever = () => {
   const [recipient, setRecipient] = useState([]);
   const token = useSelector((state) => state.auth.token);
   const router = useRouter();
+  const [currentPage, setCurrentPage] = useState(1);
 
   const dispatch = useDispatch();
 
   const getRecipient = async () => {
     const { data } = await http(token).get(
-      "/transactions/recipient?page=1&limit=5"
+      `/transactions/recipient?page=${currentPage}&limit=5`
     );
     setRecipient(data.results);
   };
@@ -26,9 +27,16 @@ const reciever = () => {
     router.push("/amount");
   };
 
+  const handlePrev = () => {
+    setCurrentPage(currentPage - 1);
+  };
+  const handleNext = () => {
+    setCurrentPage(currentPage + 1);
+  };
+
   useEffect(() => {
     getRecipient();
-  }, []);
+  }, [currentPage]);
 
   return (
     <MainLayout>
@@ -78,6 +86,31 @@ const reciever = () => {
               </div>
             );
           })}
+        </div>
+        <div className="btn-group grid grid-cols-2 mt-5">
+          {currentPage > 1 ? (
+            <button
+              className="btn bg-primary hover:bg-primary"
+              onClick={handlePrev}
+            >
+              Previous page
+            </button>
+          ) : (
+            <button
+              disabled={true}
+              className="btn btn-outline"
+              onClick={handlePrev}
+            >
+              Previous page
+            </button>
+          )}
+
+          <button
+            className="btn bg-primary hover:bg-primary"
+            onClick={handleNext}
+          >
+            Next
+          </button>
         </div>
       </div>
     </MainLayout>
