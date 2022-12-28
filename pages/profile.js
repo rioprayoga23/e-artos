@@ -66,15 +66,12 @@ const profile = () => {
               className="w-[90px] h-[90px] mb-3 rounded-lg"
             />
           ) : (
-            <img
-              src="img/profile2.png"
-              alt=""
-              className="w-[90px] h-[90px] mb-3 rounded-lg"
-            />
+            <div className="w-[90px] h-[90px] mb-3 rounded-lg bg-gray-200"></div>
           )}
 
           <div className="flex gap-3 text-[#7A7886] items-center justify-center">
             <input
+              className="w-[100px]"
               type="file"
               onChange={(event) => setSelectedImage(event.target.files[0])}
             ></input>

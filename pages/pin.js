@@ -71,7 +71,7 @@ export default function Pin() {
 
     try {
       const { data } = await http(token).post("/auth/set-pin", form);
-      setMessage(data.results.message);
+      setMessage(data.success);
     } catch (error) {
       console.log(error);
     }

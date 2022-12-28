@@ -1,8 +1,35 @@
-import React from "react";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import React, { useEffect, useState } from "react";
 import { Search } from "react-feather";
+import { useDispatch, useSelector } from "react-redux";
 import MainLayout from "../components/layouts/MainLayout";
+import http from "../helpers/http";
+import { chooseRecipient } from "../redux/reducers/transactions";
 
 const reciever = () => {
+  const [recipient, setRecipient] = useState([]);
+  const token = useSelector((state) => state.auth.token);
+  const router = useRouter();
+
+  const dispatch = useDispatch();
+
+  const getRecipient = async () => {
+    const { data } = await http(token).get(
+      "/transactions/recipient?page=1&limit=5"
+    );
+    setRecipient(data.results);
+  };
+
+  const handleChoose = (id) => {
+    dispatch(chooseRecipient({ recipientId: id }));
+    router.push("/amount");
+  };
+
+  useEffect(() => {
+    getRecipient();
+  }, []);
+
   return (
     <MainLayout>
       <div className="bg-white p-3 rounded-lg shadow-md w-full">
@@ -26,58 +53,31 @@ const reciever = () => {
           </div>
         </div>
         <div className="flex flex-col gap-5">
-          <div className="flex justify-between items-center shadow-md p-4 rounded-lg cursor-pointer">
-            <div className="flex gap-3 items-center">
-              <img
-                src="img/profile3.png"
-                alt=""
-                className="h-[56px] w-[56px]"
-              />
-              <div>
-                <h3 className="font-semibold">Samuel Suhi</h3>
-                <p className="text-sm">+62 813-8492-9994</p>
+          {recipient.map((data) => {
+            return (
+              <div
+                className="flex justify-between items-center shadow-md p-4 rounded-lg cursor-pointer"
+                onClick={(e) => handleChoose(data.id)}
+                key={data.id}
+              >
+                <div className="flex gap-3 items-center">
+                  {data.picture ? (
+                    <img
+                      src={`https://68xkph-8888.preview.csb.app/upload/${data?.picture}`}
+                      alt=""
+                      className="w-[60px] h-[60px] rounded-lg"
+                    />
+                  ) : (
+                    <div className="w-[60px] h-[60px] rounded-lg bg-gray-200"></div>
+                  )}
+                  <div>
+                    <h3 className="font-semibold">{`${data.firstName} ${data.lastName}`}</h3>
+                    <p className="text-sm">{data.phoneNumber}</p>
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
-          <div className="flex justify-between items-center shadow-md p-4 rounded-lg cursor-pointer">
-            <div className="flex gap-3 items-center">
-              <img
-                src="img/logo-netflix.png"
-                alt=""
-                className="h-[56px] w-[56px]"
-              />
-              <div>
-                <h3 className="font-semibold">Netflix</h3>
-                <p className="text-sm">+62 813-8492-9994</p>
-              </div>
-            </div>
-          </div>
-          <div className="flex justify-between items-center shadow-md p-4 rounded-lg cursor-pointer">
-            <div className="flex gap-3 items-center">
-              <img
-                src="img/profile3.png"
-                alt=""
-                className="h-[56px] w-[56px]"
-              />
-              <div>
-                <h3 className="font-semibold">Samuel Suhi</h3>
-                <p className="text-sm">+62 813-8492-9994</p>
-              </div>
-            </div>
-          </div>
-          <div className="flex justify-between items-center shadow-md p-4 rounded-lg cursor-pointer">
-            <div className="flex gap-3 items-center">
-              <img
-                src="img/logo-netflix.png"
-                alt=""
-                className="h-[56px] w-[56px]"
-              />
-              <div>
-                <h3 className="font-semibold">Netflix</h3>
-                <p className="text-sm">+62 813-8492-9994</p>
-              </div>
-            </div>
-          </div>
+            );
+          })}
         </div>
       </div>
     </MainLayout>

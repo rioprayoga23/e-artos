@@ -1,21 +1,53 @@
 import Link from "next/link";
-import Router from "next/router";
-import React from "react";
+import React, { useState } from "react";
 import { Grid, ArrowUp, Plus, User, LogOut } from "react-feather";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../redux/reducers/auth";
 import Footer from "../Footer";
 import Navbar from "../Navbar";
 
+import { Formik, Form, Field } from "formik";
+import * as Yup from "yup";
+import http from "../../helpers/http";
+import { useRouter } from "next/navigation";
+import Router from "next/router";
+
+const topUpSchema = Yup.object().shape({
+  amount: Yup.number()
+    .required("Required")
+    .test(
+      "Is positive?",
+      "The amount must be greater than 0!",
+      (value) => value > 0
+    ),
+});
+
 const MainLayout = ({ children }) => {
+  const token = useSelector((state) => state.auth.token);
+  const [message, setMessage] = useState("");
   const dispatch = useDispatch();
+  const router = useRouter();
+
   const doLogout = () => {
     dispatch(logout());
     Router.push("/login");
   };
 
+  const doTopUp = async (value) => {
+    const form = new URLSearchParams({
+      amount: value.amount,
+    });
+    try {
+      const { data } = await http(token).post("/transactions/topup", form);
+      setMessage(data.message);
+      router.refresh();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col h-screen">
       <div className="flex-grow bg-third">
         <Navbar />
         <main className="px-24 flex py-10 lg:px-9 3xl:px-[450px] gap-5 md:px-5">
@@ -68,21 +100,71 @@ const MainLayout = ({ children }) => {
             className="modal md:modal-bottom cursor-pointer"
           >
             <label className="modal-box" htmlFor="">
+              {message && (
+                <div className="alert alert-success shadow-lg mb-5">
+                  <div>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="stroke-current flex-shrink-0 h-6 w-6"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                      />
+                    </svg>
+                    <span>{message}</span>
+                  </div>
+                </div>
+              )}
               <h3 className="text-lg font-bold">Topup</h3>
               <p className="py-4">
                 Enter the amount of money, and click submit
               </p>
-              <div className="px-24 py-5 border-2 flex items-center justify-center rounded-lg">
-                <input
-                  type="number"
-                  className="border-b-2 outline-none text-2xl text-center"
-                />
-              </div>
-              <div className="flex justify-end mt-10">
-                <div className="btn bg-primary hover:bg-primary cursor-pointer px-10">
-                  Submit
-                </div>
-              </div>
+              <Formik
+                initialValues={{
+                  amount: "",
+                }}
+                validationSchema={topUpSchema}
+                onSubmit={(value) => doTopUp(value)}
+              >
+                {({ errors, touched, dirty }) => (
+                  <Form>
+                    <div className="px-24 md:px-9 py-5 border-2 flex items-center justify-center rounded-lg">
+                      <Field
+                        type="number"
+                        name="amount"
+                        className={`w-full outline-none text-2xl text-center border-b-2 focus:outline-none px-12 md:px-0 pb-2 bg-white  ${
+                          errors.amount && touched.amount && "border-red-500"
+                        } ${
+                          !errors.amount &&
+                          touched.amount &&
+                          "border-purple-500"
+                        }`}
+                      />
+                    </div>
+                    {errors.amount && touched.amount && (
+                      <label className="label">
+                        <span className="label-text-alt text-red-500">
+                          {errors.amount}
+                        </span>
+                      </label>
+                    )}
+                    <div className="flex justify-end mt-10">
+                      <button
+                        type="submit"
+                        disabled={!dirty}
+                        className="btn bg-primary hover:bg-primary cursor-pointer px-10"
+                      >
+                        Submit
+                      </button>
+                    </div>
+                  </Form>
+                )}
+              </Formik>
             </label>
           </label>
         </main>

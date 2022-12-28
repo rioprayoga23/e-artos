@@ -1,16 +1,18 @@
+import Link from "next/link";
 import React, { useState } from "react";
 import { Download } from "react-feather";
+import { useSelector } from "react-redux";
 import MainLayout from "../components/layouts/MainLayout";
 import StatusFailed from "../components/status-failed";
 import StatusSuccess from "../components/status-success";
 
 const Status = () => {
-  const [success, setSuccess] = useState(false);
+  const status = useSelector((state) => state.transactions.status);
 
   return (
     <MainLayout>
       <div className="bg-white p-3 rounded-lg shadow-md w-full">
-        {success ? <StatusSuccess /> : <StatusFailed />}
+        {status === "success" ? <StatusSuccess /> : <StatusFailed />}
         <h3 className="font-semibold mb-5 mt-10">Details</h3>
         <div className="flex flex-col gap-5">
           <div className="flex justify-between items-center shadow-md p-4 rounded-lg">
@@ -56,15 +58,17 @@ const Status = () => {
             </div>
           </div>
         </div>
-        {success ? (
+        {status ? (
           <div className="flex justify-end mt-20 gap-5 md:flex-col md:gap-3">
             <div className="btn bg-purple-600 hover:bg-purple-600 px-6 md:w-full flex gap-3 w-[200px] lg:flex-1">
               <Download />
               Download PDF
             </div>
-            <div className="btn bg-primary hover:bg-primary px-6 md:w-full w-[200px] lg:flex-1">
-              Back To Home
-            </div>
+            <Link href="/home">
+              <div className="btn bg-primary hover:bg-primary px-6 md:w-full w-[200px] lg:flex-1">
+                Back To Home
+              </div>
+            </Link>
           </div>
         ) : (
           <div className="flex justify-end mt-20 gap-5">

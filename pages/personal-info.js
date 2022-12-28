@@ -59,9 +59,13 @@ const PersonalInfo = () => {
             <div className="w-[60%]">
               <div className="flex-1">
                 <p className="text-sm">Phone Number</p>
-                <h3 className="font-semibold">
-                  {userData?.phoneNumber || <Skeleton />}
-                </h3>
+                {userData?.phoneNumber !== "undefined" ? (
+                  <h3 className="font-semibold">
+                    {userData?.phoneNumber || <Skeleton />}
+                  </h3>
+                ) : (
+                  <h3 className="font-semibold">{userData?.phoneNumber}</h3>
+                )}
               </div>
             </div>
             <Link href="/manage-phone-number" className="text-purple-600">

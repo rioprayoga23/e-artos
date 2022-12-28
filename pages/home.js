@@ -1,19 +1,30 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import MainLayout from "../components/layouts/MainLayout";
 import { ArrowUp, ArrowDown, Plus } from "react-feather";
 import Link from "next/link";
 import { useSelector } from "react-redux";
+import http from "../helpers/http";
 
 const HomePage = () => {
+  const [userData, setUserData] = useState();
   const token = useSelector((state) => state.auth.token);
+
+  const getCurrentUser = async () => {
+    const { data } = await http(token).get("/profile");
+    setUserData(data.results);
+  };
+
+  useEffect(() => {
+    getCurrentUser();
+  }, []);
 
   return (
     <MainLayout>
       <div className="bg-primary p-5 shadow-md rounded-lg flex text-white md:flex-col md:w-full">
         <div className="flex flex-col gap-4 flex-1">
           <p className="font-base">Balance</p>
-          <h3 className="text-3xl font-semibold">Rp120.000</h3>
-          <p className="font-base">+62 813-9387-7946</p>
+          <h3 className="text-3xl font-semibold">Rp{userData?.balance}</h3>
+          <p className="font-base">{userData?.phoneNumber}</p>
         </div>
         <div className="grid grid-rows-2 gap-3 md:mt-10 md:grid-cols-2 md:grid-rows-1">
           <Link href="/receiver">

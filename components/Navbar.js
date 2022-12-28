@@ -9,9 +9,25 @@ import Router from "next/router";
 
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import { Formik, Form, Field } from "formik";
+import { useRouter } from "next/navigation";
+import * as Yup from "yup";
+
+const topUpSchema = Yup.object().shape({
+  amount: Yup.number()
+    .required("Required")
+    .test(
+      "Is positive?",
+      "The amount must be greater than 0!",
+      (value) => value > 0
+    ),
+});
 
 const Navbar = () => {
   const [userData, setUserData] = useState();
+  const [message, setMessage] = useState("");
+  const router = useRouter();
+
   const token = useSelector((state) => state.auth.token);
 
   const dispatch = useDispatch();
@@ -23,6 +39,19 @@ const Navbar = () => {
   const getCurrentUser = async () => {
     const { data } = await http(token).get("/profile");
     setUserData(data.results);
+  };
+
+  const doTopUp = async (value) => {
+    const form = new URLSearchParams({
+      amount: value.amount,
+    });
+    try {
+      const { data } = await http(token).post("/transactions/topup", form);
+      setMessage(data.message);
+      router.refresh();
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
@@ -37,14 +66,35 @@ const Navbar = () => {
         </h1>
         <div className="flex items-center gap-7 md:hidden">
           <div className="flex items-center gap-3">
-            <Link href="/profile">
-              <img src="img/profile3.png" alt="" />
-            </Link>
+            {userData?.picture ? (
+              <img
+                src={`https://68xkph-8888.preview.csb.app/upload/${userData?.picture}`}
+                alt=""
+                className="w-[60px] h-[60px] rounded-lg"
+              />
+            ) : (
+              <div className="w-[60px] h-[60px] rounded-lg bg-gray-200"></div>
+            )}
             <div className="w-28">
-              <h3 className="text-lg font-semibold">
-                {userData?.firstName || <Skeleton />}
-              </h3>
-              <p>{userData?.phoneNumber || <Skeleton />}</p>
+              {
+                <div>
+                  {userData?.phoneNumber != "undefined" ? (
+                    <div>
+                      <h3 className="text-lg font-semibold">
+                        {userData?.firstName || <Skeleton />}
+                      </h3>
+                      <p>{userData?.phoneNumber || <Skeleton />}</p>
+                    </div>
+                  ) : (
+                    <div>
+                      <h3 className="text-lg font-semibold">
+                        {userData?.firstName || <Skeleton />}
+                      </h3>
+                      <p>{userData?.phoneNumber}</p>
+                    </div>
+                  )}
+                </div>
+              }
             </div>
           </div>
           <div>
@@ -103,17 +153,45 @@ const Navbar = () => {
         <label className="modal-box relative" htmlFor="">
           <h3 className="text-lg font-bold">Topup</h3>
           <p className="py-4">Enter the amount of money, and click submit</p>
-          <div className="px-24 py-5 border-2 flex items-center justify-center rounded-lg">
-            <input
-              type="text"
-              className="border-b-2 outline-none text-xl text-center"
-            />
-          </div>
-          <div className="flex justify-end mt-10">
-            <div className="btn bg-primary hover:bg-primary cursor-pointer px-10">
-              Submit
-            </div>
-          </div>
+          <Formik
+            initialValues={{
+              amount: "",
+            }}
+            validationSchema={topUpSchema}
+            onSubmit={(value) => doTopUp(value)}
+          >
+            {({ errors, touched, dirty }) => (
+              <Form>
+                <div className="px-24 md:px-9 py-5 border-2 flex items-center justify-center rounded-lg">
+                  <Field
+                    type="number"
+                    name="amount"
+                    className={`w-full outline-none text-2xl text-center border-b-2 focus:outline-none px-12 md:px-0 pb-2 bg-white  ${
+                      errors.amount && touched.amount && "border-red-500"
+                    } ${
+                      !errors.amount && touched.amount && "border-purple-500"
+                    }`}
+                  />
+                </div>
+                {errors.amount && touched.amount && (
+                  <label className="label">
+                    <span className="label-text-alt text-red-500">
+                      {errors.amount}
+                    </span>
+                  </label>
+                )}
+                <div className="flex justify-end mt-10">
+                  <button
+                    type="submit"
+                    disabled={!dirty}
+                    className="btn bg-primary hover:bg-primary cursor-pointer px-10"
+                  >
+                    Submit
+                  </button>
+                </div>
+              </Form>
+            )}
+          </Formik>
         </label>
       </label>
     </nav>
