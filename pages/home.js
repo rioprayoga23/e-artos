@@ -88,26 +88,44 @@ const HomePage = () => {
                   <div className="flex gap-3 items-center">
                     {data.recipientId === decoded.id &&
                       data.senderId === null && (
-                        <img
-                          src={`https://68xkph-8888.preview.csb.app/upload/${data?.recipientPicture}`}
-                          alt=""
-                          className="h-[56px] w-[56px]"
-                        />
+                        <div>
+                          {data?.recipientPicture ? (
+                            <img
+                              src={`https://68xkph-8888.preview.csb.app/upload/${data?.recipientPicture}`}
+                              alt=""
+                              className="h-[56px] w-[56px]"
+                            />
+                          ) : (
+                            <div className="h-[56px] w-[56px] bg-gray-200"></div>
+                          )}
+                        </div>
                       )}
                     {data.recipientId !== decoded.id && (
-                      <img
-                        src={`https://68xkph-8888.preview.csb.app/upload/${data?.recipientPicture}`}
-                        alt=""
-                        className="h-[56px] w-[56px]"
-                      />
+                      <div>
+                        {data?.recipientPicture ? (
+                          <img
+                            src={`https://68xkph-8888.preview.csb.app/upload/${data?.recipientPicture}`}
+                            alt=""
+                            className="h-[56px] w-[56px]"
+                          />
+                        ) : (
+                          <div className="h-[56px] w-[56px] bg-gray-200"></div>
+                        )}
+                      </div>
                     )}
                     {data.recipientId === decoded.id &&
                       data.senderId !== null && (
-                        <img
-                          src={`https://68xkph-8888.preview.csb.app/upload/${data?.senderPicture}`}
-                          alt=""
-                          className="h-[56px] w-[56px]"
-                        />
+                        <div>
+                          {data?.senderPicture ? (
+                            <img
+                              src={`https://68xkph-8888.preview.csb.app/upload/${data?.senderPicture}`}
+                              alt=""
+                              className="h-[56px] w-[56px]"
+                            />
+                          ) : (
+                            <div className="h-[56px] w-[56px] bg-gray-200"></div>
+                          )}
+                        </div>
                       )}
                     <div>
                       <h3 className="font-semibold">{data.recipientname}</h3>

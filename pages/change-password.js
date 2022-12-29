@@ -7,6 +7,7 @@ import * as Yup from "yup";
 import YupPassword from "yup-password";
 import http from "../helpers/http";
 import { useSelector } from "react-redux";
+import Router from "next/router";
 
 YupPassword(Yup); // extend yup
 
@@ -59,6 +60,7 @@ const ChangePassword = () => {
     try {
       const { data } = await http(token).post("/profile/change-password", form);
       setMessage(data.message);
+      Router.push("/profile");
     } catch (error) {
       setMessage(error.response.data.message);
     }

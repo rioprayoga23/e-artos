@@ -7,6 +7,7 @@ import YupPassword from "yup-password";
 import "yup-phone";
 import { useSelector } from "react-redux";
 import http from "../helpers/http";
+import Router from "next/router";
 
 YupPassword(Yup); // extend yup
 
@@ -17,7 +18,7 @@ const editPhoneSchema = Yup.object().shape({
 });
 
 const ManagePhoneNumber = () => {
-  const [message, setMessage] = useState(true);
+  const [message, setMessage] = useState("");
 
   const token = useSelector((state) => state.auth.token);
 
@@ -29,6 +30,7 @@ const ManagePhoneNumber = () => {
     try {
       const { data } = await http(token).post("/profile/phone-number", form);
       setMessage(data.message);
+      Router.push("/profile");
     } catch (error) {
       setMessage(error.response.data.message);
     }
@@ -45,6 +47,26 @@ const ManagePhoneNumber = () => {
           </p>
         </div>
         <div className="px-48 pb-40 mt-20 md:px-0 md:pb-10 lg:px-9">
+          {message && (
+            <div className="alert alert-success shadow-lg w-[100%]">
+              <div>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="stroke-current flex-shrink-0 h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+                <span>{message}</span>
+              </div>
+            </div>
+          )}
           <Formik
             initialValues={{
               phoneNumber: "",
@@ -79,13 +101,6 @@ const ManagePhoneNumber = () => {
                   </label>
                 )}
 
-                {message && (
-                  <div className="text-center mt-10">
-                    <p className="text-base font-semibold text-green-500">
-                      {message}
-                    </p>
-                  </div>
-                )}
                 <button
                   type="submit"
                   disabled={!dirty}

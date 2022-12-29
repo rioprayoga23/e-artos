@@ -162,6 +162,26 @@ const Navbar = () => {
         className="modal md:modal-bottom cursor-pointer"
       >
         <label className="modal-box relative" htmlFor="">
+          {message && (
+            <div className="alert alert-success shadow-lg mb-5">
+              <div>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="stroke-current flex-shrink-0 h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+                <span>{message}</span>
+              </div>
+            </div>
+          )}
           <h3 className="text-lg font-bold">Topup</h3>
           <p className="py-4">Enter the amount of money, and click submit</p>
           <Formik

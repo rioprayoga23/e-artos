@@ -2,6 +2,7 @@ import React, { useRef, useState } from "react";
 import MainLayout from "../components/layouts/MainLayout";
 import { useSelector } from "react-redux";
 import http from "../helpers/http";
+import Router from "next/router";
 
 const NewPin = () => {
   const token = useSelector((state) => state.auth.token);
@@ -65,6 +66,9 @@ const NewPin = () => {
     try {
       const { data } = await http(token).post("/profile/change-pin", form);
       setMessage(data.message);
+      setTimeout(() => {
+        Router.push("/profile");
+      }, 2000);
     } catch (error) {
       setMessage(error.response.data.message);
     }

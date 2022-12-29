@@ -125,7 +125,7 @@ const amount = () => {
                   <Field
                     name="amount"
                     type="number"
-                    className={`text-primary py-7 placeholder:text-4xl text-4xl outline-none text-center ${
+                    className={`text-primary py-7 placeholder:text-4xl text-4xl outline-none text-center md:w-[180px] ${
                       errors.amount && touched.amount && "border-red-500"
                     } ${
                       !errors.amount && touched.amount && "border-purple-500"
