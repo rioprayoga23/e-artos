@@ -20,7 +20,7 @@ const amountSchema = Yup.object().shape({
   notes: Yup.string().required("Required"),
 });
 
-const amount = () => {
+const Amount = () => {
   const token = useSelector((state) => state.auth.token);
   const recipientId = useSelector((state) => state.transactions.recipientId);
   const [userData, setUserData] = useState("");
