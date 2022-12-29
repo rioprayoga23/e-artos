@@ -183,4 +183,4 @@ const Amount = () => {
   );
 };
 
-export default amount;
+export default Amount;

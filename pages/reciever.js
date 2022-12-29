@@ -117,4 +117,4 @@ const Reciever = () => {
   );
 };
 
-export default reciever;
+export default Reciever;

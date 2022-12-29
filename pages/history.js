@@ -160,4 +160,4 @@ const History = () => {
   );
 };
 
-export default history;
+export default History;

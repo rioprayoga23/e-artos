@@ -13,3 +13,5 @@ export default function App({ Component, pageProps }) {
     </Provider>
   );
 }
+
+App.displayName = "Myapp";

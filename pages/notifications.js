@@ -30,4 +30,4 @@ const Notifications = () => {
   );
 };
 
-export default notifications;
+export default Notifications;
