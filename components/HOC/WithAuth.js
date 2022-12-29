@@ -18,4 +18,5 @@ const WithAuth = (Components) => {
   };
 };
 
+WithAuth.displayName = "Myapp";
 export default WithAuth;
