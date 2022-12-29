@@ -60,7 +60,9 @@ const ChangePassword = () => {
     try {
       const { data } = await http(token).post("/profile/change-password", form);
       setMessage(data.message);
-      Router.push("/profile");
+      setTimeout(() => {
+        Router.push("/profile");
+      }, 2000);
     } catch (error) {
       setMessage(error.response.data.message);
     }

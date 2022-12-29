@@ -3,8 +3,8 @@ import React, { useEffect, useState } from "react";
 import { Download } from "react-feather";
 import { useSelector } from "react-redux";
 import MainLayout from "../components/layouts/MainLayout";
-import StatusFailed from "../components/status-failed";
-import StatusSuccess from "../components/status-success";
+import StatusFailed from "../components/StatusFailed";
+import StatusSuccess from "../components/StatusSuccess";
 import http from "../helpers/http";
 
 const Status = () => {
