@@ -7,7 +7,7 @@ import MainLayout from "../components/layouts/MainLayout";
 import http from "../helpers/http";
 import { chooseRecipient } from "../redux/reducers/transactions";
 
-const reciever = () => {
+const Reciever = () => {
   const [recipient, setRecipient] = useState([]);
   const token = useSelector((state) => state.auth.token);
   const router = useRouter();

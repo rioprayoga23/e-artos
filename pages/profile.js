@@ -10,7 +10,7 @@ import { logout } from "../redux/reducers/auth";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
-const profile = () => {
+const Profile = () => {
   const [userData, setUserData] = useState();
   const token = useSelector((state) => state.auth.token);
   const [success, setSuccess] = useState(false);

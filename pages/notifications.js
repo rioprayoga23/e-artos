@@ -4,7 +4,7 @@ import ItemNotification from "../components/ItemNotification";
 import MainLayout from "../components/layouts/MainLayout";
 import http from "../helpers/http";
 
-const notifications = () => {
+const Notifications = () => {
   const token = useSelector((state) => state.auth.token);
   const [notification, setNotification] = useState([]);
 

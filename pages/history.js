@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import MainLayout from "../components/layouts/MainLayout";
 import http from "../helpers/http";
 
-const history = () => {
+const History = () => {
   const token = useSelector((state) => state.auth.token);
   const [userData, setUserData] = useState();
   const [transactionsData, setTransactionsData] = useState([]);

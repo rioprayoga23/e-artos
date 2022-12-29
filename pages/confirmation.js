@@ -5,7 +5,7 @@ import MainLayout from "../components/layouts/MainLayout";
 import http from "../helpers/http";
 import { transactionsAction } from "../redux/action/transactions";
 
-const confirmation = () => {
+const Confirmation = () => {
   const token = useSelector((state) => state.auth.token);
   const [userData, setUserData] = useState("");
   const dispatch = useDispatch();
