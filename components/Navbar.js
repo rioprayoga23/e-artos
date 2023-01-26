@@ -40,6 +40,7 @@ const Navbar = () => {
   const { phoneNumber } = useSelector((state) => state.profile);
 
   const dispatch = useDispatch();
+
   const doLogout = () => {
     dispatch(logout());
     dispatch(clearProfileAction());
