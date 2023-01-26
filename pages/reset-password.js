@@ -1,9 +1,10 @@
 import Link from "next/link";
 import React, { useState } from "react";
 import { Mail, Lock, EyeOff, Eye } from "react-feather";
+import WithNoAuth from "../components/HOC/WithNoAuth";
 import MainLayoutAuth from "../components/layouts/MainLayoutAuth";
 
-export default function ResetPassword() {
+const ResetPassword = () => {
   const [type, setType] = useState("password");
 
   const showPassword = () => {
@@ -80,4 +81,6 @@ export default function ResetPassword() {
       </>
     </MainLayoutAuth>
   );
-}
+};
+
+export default WithNoAuth(ResetPassword);

@@ -6,7 +6,7 @@ const initialState = {
   amount: "",
   notes: "",
   pin: "",
-  isLoading: true,
+  isLoading: false,
   status: "",
 };
 
@@ -23,13 +23,14 @@ const transactionsReducer = createSlice({
     },
   },
   extraReducers: (build) => {
-    build.addCase(transactionsAction.pending, (state, { payload }) => {
+    build.addCase(transactionsAction.pending, (state) => {
+      state.isLoading = true;
+    });
+    build.addCase(transactionsAction.rejected, (state) => {
       state.isLoading = false;
     });
-    build.addCase(transactionsAction.rejected, (state, { payload }) => {
+    build.addCase(transactionsAction.fulfilled, (state) => {
       state.isLoading = false;
-    });
-    build.addCase(transactionsAction.fulfilled, (state, { payload }) => {
       state.status = "success";
     });
   },

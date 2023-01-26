@@ -1,5 +1,6 @@
 import React from "react";
 import { Mail } from "react-feather";
+import WithNoAuth from "../components/HOC/WithNoAuth";
 import MainLayoutAuth from "../components/layouts/MainLayoutAuth";
 
 const ForgotPassword = () => {
@@ -39,4 +40,4 @@ const ForgotPassword = () => {
   );
 };
 
-export default ForgotPassword;
+export default WithNoAuth(ForgotPassword);

@@ -2,20 +2,25 @@ import { useRouter } from "next/router";
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import MainLayout from "../components/layouts/MainLayout";
+import Spinner from "../components/Spinner";
 import http from "../helpers/http";
 import { transactionsAction } from "../redux/action/transactions";
 
 const Confirmation = () => {
   const token = useSelector((state) => state.auth.token);
-  const [userData, setUserData] = useState("");
   const dispatch = useDispatch();
   const router = useRouter();
 
-  const recipientId = useSelector((state) => state.transactions.recipientId);
-  const amount = useSelector((state) => state.transactions.amount);
-  const notes = useSelector((state) => state.transactions.notes);
+  const { recipientId } = useSelector((state) => state.transactions);
+  const { amount } = useSelector((state) => state.transactions);
+  const { notes } = useSelector((state) => state.transactions);
+  const { isLoadingBtn } = useSelector((state) => state.transactions.isLoading);
+  const { balance } = useSelector((state) => state.profile);
+  const { pinUser } = useSelector((state) => state.profile);
+
   const [recipientData, setRecipientData] = useState();
   const [message, setMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const pin1 = useRef(null);
   const pin2 = useRef(null);
@@ -68,7 +73,7 @@ const Confirmation = () => {
       inputPin6
     );
     const pin = inputPin.join("").toString();
-    if (pin === userData?.pin) {
+    if (pin === pinUser) {
       const cb = () => {
         router.push("/status");
       };
@@ -87,25 +92,18 @@ const Confirmation = () => {
     }
   };
 
-  const getRecipient = async () => {
-    const { data } = await http(token).get(
-      `/transactions/recipient/${recipientId}`
-    );
-    setRecipientData(data.results);
-  };
-
-  const getCurrentUser = async () => {
-    const { data } = await http(token).get("/profile");
-    setUserData(data.results);
-  };
-
   useEffect(() => {
+    const getRecipient = async () => {
+      setIsLoading(true);
+      const { data } = await http(token).get(
+        `/transactions/recipient/${recipientId}`
+      );
+      setRecipientData(data.results);
+      setIsLoading(false);
+    };
+
     getRecipient();
-  }, [recipientId]);
-
-  useEffect(() => {
-    getCurrentUser();
-  }, []);
+  }, [recipientId, token]);
 
   return (
     <MainLayout>
@@ -115,21 +113,27 @@ const Confirmation = () => {
         </div>
         <div className="flex flex-col gap-5">
           <div className="flex justify-between items-center shadow-md p-4 rounded-lg cursor-pointer">
-            <div className="flex gap-3 items-center">
-              {recipientData?.picture ? (
-                <img
-                  src={`https://68xkph-8888.preview.csb.app/upload/${recipientData?.picture}`}
-                  alt=""
-                  className="w-[60px] h-[60px] rounded-lg"
-                />
-              ) : (
-                <div className="w-[60px] h-[60px] rounded-lg bg-gray-200"></div>
-              )}
-              <div>
-                <h3 className="font-semibold">{`${recipientData?.firstName} ${recipientData?.lastName}`}</h3>
-                <p className="text-sm">{recipientData?.phoneNumber}</p>
+            {isLoading ? (
+              <div className="flex w-full justify-center items-center">
+                <Spinner />
               </div>
-            </div>
+            ) : (
+              <div className="flex gap-3 items-center">
+                {recipientData?.picture ? (
+                  <img
+                    src={`https://68xkph-8888.preview.csb.app/upload/${recipientData?.picture}`}
+                    alt=""
+                    className="w-[60px] h-[60px] rounded-lg"
+                  />
+                ) : (
+                  <div className="w-[60px] h-[60px] rounded-lg bg-gray-200"></div>
+                )}
+                <div>
+                  <h3 className="font-semibold">{`${recipientData?.firstName} ${recipientData?.lastName}`}</h3>
+                  <p className="text-sm">{recipientData?.phoneNumber}</p>
+                </div>
+              </div>
+            )}
           </div>
         </div>
         <h3 className="font-semibold mb-5 mt-10">Details</h3>
@@ -143,7 +147,7 @@ const Confirmation = () => {
           <div className="flex justify-between items-center shadow-md p-4 rounded-lg">
             <div>
               <p className="text-sm">Balance Left</p>
-              <h3 className="font-semibold">{userData?.balance - amount}</h3>
+              <h3 className="font-semibold">{balance - amount}</h3>
             </div>
           </div>
           <div className="flex justify-between items-center shadow-md p-4 rounded-lg">
@@ -276,8 +280,11 @@ const Confirmation = () => {
 
             <div className="flex justify-end mt-3">
               <button
+                disabled={isLoadingBtn}
                 type="submit"
-                className="btn bg-primary hover:bg-primary cursor-pointer"
+                className={`btn bg-primary hover:bg-primary cursor-pointer ${
+                  isLoadingBtn && "loading"
+                }`}
               >
                 Continue
               </button>

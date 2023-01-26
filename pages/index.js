@@ -1,11 +1,31 @@
 import Head from "next/head";
+import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import { Phone, Lock, Download, Menu } from "react-feather";
 import { useSelector } from "react-redux";
 
-export default function Home() {
+const data = [
+  {
+    no: 1,
+    title: "Small Fee",
+    desc: "All your data is secured properly in our system and it`s encrypted.",
+  },
+  {
+    no: 2,
+    title: "Data Secured",
+    desc: "All your data is secured properly in our system and it’s encrypted.",
+  },
+  {
+    no: 3,
+    title: "User Friendly",
+    desc: "FazzPay come up with modern and sleek design and not complicated.",
+  },
+];
+
+const Home = ({ features }) => {
   const token = useSelector((state) => state.auth.token);
+
   return (
     <>
       <Head>
@@ -167,7 +187,13 @@ export default function Home() {
         </div>
         <div className="px-24 bg-third grid grid-cols-2 items-center md:px-9 md:py-20 lg:grid-cols-1 lg:px-9 lg:py-20 xl:px-10">
           <div className="lg:hidden">
-            <img src="img/phone-main.png" alt="" className="h-[900px]" />
+            <Image
+              src="/img/phone-main.png"
+              alt=""
+              className="h-[900px]"
+              width={430}
+              height={900}
+            />
           </div>
 
           <div className="flex flex-col gap-5">
@@ -175,21 +201,21 @@ export default function Home() {
               All The <span className="text-primary">Great</span> E-Artos
               Features.
             </h1>
-            <div className="text-lg">
-              <div className="p-5 bg-white shadow-xl rounded-xl">
-                <div className="flex gap-5 font-semibold">
-                  <p className="text-primary">1.</p>
-                  <p>Small Fee</p>
-                </div>
-                <div>
-                  <p>
-                    We only charge 5% of every success transaction done in
-                    FazzPay app.
-                  </p>
+            {features.map((item) => (
+              <div className="text-lg" key={item.no}>
+                <div className="p-5 bg-white shadow-xl rounded-xl">
+                  <div className="flex gap-5 font-semibold">
+                    <p className="text-primary">{item.no}</p>
+                    <p>{item.title}</p>
+                  </div>
+                  <div>
+                    <p>{item.desc}</p>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className="text-lg">
+            ))}
+
+            {/* <div className="text-lg">
               <div className="p-5 bg-white shadow-xl rounded-xl">
                 <div className="flex gap-5 font-semibold">
                   <p className="text-primary">2.</p>
@@ -216,7 +242,7 @@ export default function Home() {
                   </p>
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
 
@@ -290,4 +316,14 @@ export default function Home() {
       </main>
     </>
   );
+};
+
+export async function getStaticProps() {
+  return {
+    props: {
+      features: data,
+    },
+  };
 }
+
+export default Home;

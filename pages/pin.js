@@ -6,7 +6,7 @@ import jwt_decode from "jwt-decode";
 import Link from "next/link";
 import http from "../helpers/http";
 
-export default function Pin() {
+const Pin = () => {
   const token = useSelector((state) => state.auth.token);
   const [message, setMessage] = useState("");
 
@@ -196,4 +196,6 @@ export default function Pin() {
       </>
     </MainLayoutAuth>
   );
-}
+};
+
+export default Pin;

@@ -7,6 +7,7 @@ import Router from "next/router";
 const NewPin = () => {
   const token = useSelector((state) => state.auth.token);
   const [message, setMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const pin1 = useRef(null);
   const pin2 = useRef(null);
@@ -64,12 +65,16 @@ const NewPin = () => {
     });
 
     try {
+      setIsLoading(true);
       const { data } = await http(token).post("/profile/change-pin", form);
       setMessage(data.message);
+      setIsLoading(false);
       setTimeout(() => {
         Router.push("/profile");
+        setMessage("");
       }, 2000);
     } catch (error) {
+      setIsLoading(false);
       setMessage(error.response.data.message);
     }
   };
@@ -82,8 +87,50 @@ const NewPin = () => {
             Type your new 6 digits security PIN to use in Fazzpay.
           </p>
         </div>
+        <div className="px-48 mt-5 md:px-0 lg:px-9 xl:px-12">
+          {message &&
+            (message !== "Data updated!" ? (
+              <div className="alert alert-error shadow-lg w-[100%]">
+                <div>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="stroke-current flex-shrink-0 h-6 w-6"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
+                  </svg>
+                  <span>{message}</span>
+                </div>
+              </div>
+            ) : (
+              <div className="alert alert-success shadow-lg w-[100%]">
+                <div>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="stroke-current flex-shrink-0 h-6 w-6"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
+                  </svg>
+                  <span>{message}</span>
+                </div>
+              </div>
+            ))}
+        </div>
         <form onSubmit={createPin}>
-          <div className="grid grid-cols-6 gap-5 mt-20 md:gap-2 lg:gap-2 xl:gap-3 px-48 md:px-0 lg:px-9 xl:px-16">
+          <div className="grid grid-cols-6 gap-5 mt-10 md:gap-2 lg:gap-2 xl:gap-3 px-48 md:px-0 lg:px-9 xl:px-16">
             <div className="border px-2 pt-4 md:pt-2 pb-2 rounded-md w-full">
               <input
                 type="number"
@@ -152,22 +199,13 @@ const NewPin = () => {
             </div>
           </div>
 
-          {message !== "Data updated!" ? (
-            <div className="text-center mt-10">
-              <p className="text-base font-semibold text-red-500">{message}</p>
-            </div>
-          ) : (
-            <div className="text-center mt-10">
-              <p className="text-base font-semibold text-green-500">
-                {message}
-              </p>
-            </div>
-          )}
-
           <div className="px-48 pb-40 md:px-0 lg:px-9 xl:px-16">
             <button
+              disabled={isLoading}
               type="submit"
-              className="btn bg-primary hover:bg-primary mt-14 w-full"
+              className={`btn bg-primary hover:bg-primary mt-14 w-full ${
+                isLoading && "loading"
+              }`}
             >
               continue
             </button>

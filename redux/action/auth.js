@@ -1,5 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import http from "../../helpers/http";
+import { setCookie } from "cookies-next";
 
 export const loginAction = createAsyncThunk(
   "auth/loginAsync",
@@ -10,6 +11,7 @@ export const loginAction = createAsyncThunk(
         password: value.password,
       });
       const { data } = await http().post("/auth/login", form);
+      setCookie("token", data.results.token);
       cb();
       return data.results;
     } catch (err) {
@@ -29,6 +31,7 @@ export const registerAction = createAsyncThunk(
         password: value.password,
       });
       const { data } = await http().post("/auth/register", form);
+      setCookie("token", data.results.token);
       cb();
       return data.results;
     } catch (err) {

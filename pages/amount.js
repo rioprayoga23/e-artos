@@ -8,6 +8,8 @@ import { Field, Form, Formik } from "formik";
 import * as Yup from "yup";
 import { chooseAmount } from "../redux/reducers/transactions";
 import { useRouter } from "next/router";
+import { InvalidTokenError } from "jwt-decode";
+import Spinner from "../components/Spinner";
 
 const amountSchema = Yup.object().shape({
   amount: Yup.number()
@@ -21,26 +23,15 @@ const amountSchema = Yup.object().shape({
 });
 
 const Amount = () => {
-  const token = useSelector((state) => state.auth.token);
-  const recipientId = useSelector((state) => state.transactions.recipientId);
+  const { token } = useSelector((state) => state.auth);
+  const { recipientId } = useSelector((state) => state.transactions);
   const [userData, setUserData] = useState("");
   const [recipientData, setRecipientData] = useState();
   const [message, setMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const router = useRouter();
   const dispatch = useDispatch();
-
-  const getRecipient = async () => {
-    const { data } = await http(token).get(
-      `/transactions/recipient/${recipientId}`
-    );
-    setRecipientData(data.results);
-  };
-
-  const getCurrentUser = async () => {
-    const { data } = await http(token).get("/profile");
-    setUserData(data.results);
-  };
 
   const transfer = (value) => {
     if (value.amount > userData?.balance) {
@@ -52,12 +43,24 @@ const Amount = () => {
   };
 
   useEffect(() => {
+    const getRecipient = async () => {
+      setIsLoading(true);
+      const { data } = await http(token).get(
+        `/transactions/recipient/${recipientId}`
+      );
+      setRecipientData(data.results);
+      setIsLoading(false);
+    };
     getRecipient();
-  }, [recipientId]);
+  }, [recipientId, token]);
 
   useEffect(() => {
+    const getCurrentUser = async () => {
+      const { data } = await http(token).get("/profile");
+      setUserData(data.results);
+    };
     getCurrentUser();
-  }, []);
+  }, [token]);
 
   return (
     <MainLayout>
@@ -65,23 +68,30 @@ const Amount = () => {
         <div className="mb-10">
           <h3 className="font-semibold mb-5">Transfer Money</h3>
         </div>
+
         <div className="flex flex-col gap-5">
           <div className="flex justify-between items-center shadow-md p-4 rounded-lg cursor-pointer">
-            <div className="flex gap-3 items-center">
-              {recipientData?.picture ? (
-                <img
-                  src={`https://68xkph-8888.preview.csb.app/upload/${recipientData?.picture}`}
-                  alt=""
-                  className="w-[60px] h-[60px] rounded-lg"
-                />
-              ) : (
-                <div className="w-[60px] h-[60px] rounded-lg bg-gray-200"></div>
-              )}
-              <div>
-                <h3 className="font-semibold">{`${recipientData?.firstName} ${recipientData?.lastName}`}</h3>
-                <p className="text-sm">{recipientData?.phoneNumber}</p>
+            {isLoading ? (
+              <div className="flex w-full justify-center items-center">
+                <Spinner />
               </div>
-            </div>
+            ) : (
+              <div className="flex gap-3 items-center">
+                {recipientData?.picture ? (
+                  <img
+                    src={`https://68xkph-8888.preview.csb.app/upload/${recipientData?.picture}`}
+                    alt=""
+                    className="w-[60px] h-[60px] rounded-lg"
+                  />
+                ) : (
+                  <div className="w-[60px] h-[60px] rounded-lg bg-gray-200"></div>
+                )}
+                <div>
+                  <h3 className="font-semibold">{`${recipientData?.firstName} ${recipientData?.lastName}`}</h3>
+                  <p className="text-sm">{recipientData?.phoneNumber}</p>
+                </div>
+              </div>
+            )}
           </div>
         </div>
         <div className="w-[40%] py-10 md:w-full lg:w-[80%]">

@@ -1,17 +1,22 @@
-import Link from "next/link";
 import React, { useEffect, useState } from "react";
-import { Bell, Menu } from "react-feather";
-import { useDispatch, useSelector } from "react-redux";
-import ItemNotification from "./ItemNotification";
-import http from "../helpers/http";
-import { logout } from "../redux/reducers/auth";
+import Link from "next/link";
 import Router from "next/router";
+import Image from "next/image";
+import http from "../helpers/http";
 
-import Skeleton from "react-loading-skeleton";
-import "react-loading-skeleton/dist/skeleton.css";
+import ItemNotification from "./ItemNotification";
+
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../redux/reducers/auth";
+import { getProfileAction } from "../redux/action/profile";
+
+import { Bell, Menu } from "react-feather";
+import { deleteCookie } from "cookies-next";
+
 import { Formik, Form, Field } from "formik";
 import { useRouter } from "next/navigation";
 import * as Yup from "yup";
+import { clearProfileAction } from "../redux/reducers/profile";
 
 const topUpSchema = Yup.object().shape({
   amount: Yup.number()
@@ -24,29 +29,21 @@ const topUpSchema = Yup.object().shape({
 });
 
 const Navbar = () => {
-  const [userData, setUserData] = useState();
   const [notification, setNotification] = useState([]);
   const [message, setMessage] = useState("");
-  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
 
   const token = useSelector((state) => state.auth.token);
+  const { firstName } = useSelector((state) => state.profile);
+  const { lastName } = useSelector((state) => state.profile);
+  const { picture } = useSelector((state) => state.profile);
+  const { phoneNumber } = useSelector((state) => state.profile);
 
   const dispatch = useDispatch();
   const doLogout = () => {
     dispatch(logout());
-    Router.push("/login");
-  };
-
-  const getCurrentUser = async () => {
-    const { data } = await http(token).get("/profile");
-    setUserData(data.results);
-  };
-
-  const getNotifications = async () => {
-    const { data } = await http(token).get(
-      "/transactions/notification?page=1&limit=5"
-    );
-    setNotification(data.results);
+    dispatch(clearProfileAction());
+    deleteCookie("token");
   };
 
   const doTopUp = async (value) => {
@@ -54,18 +51,30 @@ const Navbar = () => {
       amount: value.amount,
     });
     try {
+      setIsLoading(true);
       const { data } = await http(token).post("/transactions/topup", form);
       setMessage(data.message);
-      router.refresh();
+      setIsLoading(false);
+      dispatch(getProfileAction());
     } catch (error) {
+      setIsLoading(false);
       console.log(error);
     }
   };
 
   useEffect(() => {
+    dispatch(getProfileAction());
+  }, [dispatch]);
+
+  useEffect(() => {
+    const getNotifications = async () => {
+      const { data } = await http(token).get(
+        "/transactions/notification?page=1&limit=5"
+      );
+      setNotification(data.results);
+    };
     getNotifications();
-    getCurrentUser();
-  }, []);
+  }, [token]);
 
   return (
     <nav>
@@ -74,41 +83,34 @@ const Navbar = () => {
           <Link href="/">E-Artos</Link>
         </h1>
         <div className="flex items-center gap-7 md:hidden">
-          <div className="flex items-center gap-3">
-            {userData?.picture ? (
-              <Link href="/profile">
-                <img
-                  src={`https://68xkph-8888.preview.csb.app/upload/${userData?.picture}`}
-                  alt=""
-                  className="w-[60px] h-[60px] rounded-lg"
-                />
-              </Link>
-            ) : (
-              <div className="w-[60px] h-[60px] rounded-lg bg-gray-200"></div>
-            )}
-            <div className="w-28">
-              {
-                <div>
-                  {userData?.phoneNumber ? (
-                    <div>
-                      <h3 className="text-lg font-semibold">
-                        {userData?.firstName || <Skeleton />}
-                      </h3>
-                      <p>{userData?.phoneNumber || <Skeleton />}</p>
-                    </div>
-                  ) : (
-                    <div>
-                      <h3 className="text-lg font-semibold">
-                        {userData?.firstName || <Skeleton />}
-                      </h3>
-                      <p>{userData?.phoneNumber}</p>
-                    </div>
-                  )}
+          <div className="flex gap-3 items-center">
+            <div className="avatar">
+              {picture ? (
+                <div className="w-14 rounded-lg">
+                  <Image
+                    src={process.env.NEXT_PUBLIC_IMAGE_URL + picture}
+                    width={50}
+                    height={50}
+                    alt="profile"
+                  />
                 </div>
-              }
+              ) : (
+                <div className="w-14 rounded-lg">
+                  <Image
+                    src="/img/profile.jpg"
+                    width={50}
+                    height={50}
+                    alt="profile"
+                  />
+                </div>
+              )}
+            </div>
+            <div>
+              <h3 className="text-lg font-semibold">{`${firstName} ${lastName}`}</h3>
+              <p>{phoneNumber ? `+62${phoneNumber}` : phoneNumber}</p>
             </div>
           </div>
-          <div>
+          <div className="flex items-center">
             <div className="dropdown dropdown-bottom dropdown-end">
               <Bell className="cursor-pointer" tabIndex={0} />
               <ul
@@ -139,7 +141,7 @@ const Navbar = () => {
               <Link href="/reciever">Transfer</Link>
             </li>
             <li>
-              <label htmlFor="topUp-modal-large" className="cursor-pointer">
+              <label htmlFor="my-modal-3" className="cursor-pointer">
                 Top Up
               </label>
             </li>
@@ -156,7 +158,81 @@ const Navbar = () => {
         </div>
       </div>
 
-      <input type="checkbox" id="topUp-modal-large" className="modal-toggle" />
+      <input type="checkbox" id="my-modal-3" className="modal-toggle" />
+      <div className="modal">
+        <div className="modal-box relative">
+          <label
+            onClick={() => setMessage("")}
+            htmlFor="my-modal-3"
+            className="btn btn-sm btn-circle absolute right-2 top-2"
+          >
+            ✕
+          </label>
+          <h3 className="text-lg font-bold mb-5">Top Up</h3>
+          {message && (
+            <div className="alert alert-success shadow-lg mb-5">
+              <div>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="stroke-current flex-shrink-0 h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+                <span>{message}</span>
+              </div>
+            </div>
+          )}
+          <Formik
+            initialValues={{
+              amount: "",
+            }}
+            validationSchema={topUpSchema}
+            onSubmit={(value) => doTopUp(value)}
+          >
+            {({ errors, touched, dirty }) => (
+              <Form>
+                <div className="px-24 md:px-9 py-5 border-2 flex items-center justify-center rounded-lg">
+                  <Field
+                    type="text"
+                    name="amount"
+                    className={`w-full outline-none text-2xl text-center border-b-2 focus:outline-none px-12 md:px-0 pb-2 bg-white  ${
+                      errors.amount && touched.amount && "border-red-500"
+                    } ${
+                      !errors.amount && touched.amount && "border-purple-500"
+                    }`}
+                  />
+                </div>
+                {errors.amount && touched.amount && (
+                  <label className="label">
+                    <span className="label-text-alt text-red-500">
+                      {errors.amount}
+                    </span>
+                  </label>
+                )}
+                <div className="flex justify-end mt-2">
+                  <button
+                    type="submit"
+                    disabled={!dirty || isLoading}
+                    className={`btn bg-primary hover:bg-primary cursor-pointer px-10 ${
+                      isLoading && "loading"
+                    }`}
+                  >
+                    Submit
+                  </button>
+                </div>
+              </Form>
+            )}
+          </Formik>
+        </div>
+      </div>
+      {/* <input type="checkbox" id="topUp-modal-large" className="modal-toggle" />
       <label
         htmlFor="topUp-modal-large"
         className="modal md:modal-bottom cursor-pointer"
@@ -182,6 +258,13 @@ const Navbar = () => {
               </div>
             </div>
           )}
+          <label
+            onClick={() => setMessage("")}
+            htmlFor="topUp-modal-large"
+            className="btn btn-sm btn-circle absolute right-2 top-2"
+          >
+            ✕
+          </label>
           <h3 className="text-lg font-bold">Topup</h3>
           <p className="py-4">Enter the amount of money, and click submit</p>
           <Formik
@@ -214,8 +297,10 @@ const Navbar = () => {
                 <div className="flex justify-end mt-10">
                   <button
                     type="submit"
-                    disabled={!dirty}
-                    className="btn bg-primary hover:bg-primary cursor-pointer px-10"
+                    disabled={!dirty || isLoading}
+                    className={`btn bg-primary hover:bg-primary cursor-pointer px-10 ${
+                      isLoading && "loading"
+                    }`}
                   >
                     Submit
                   </button>
@@ -224,7 +309,7 @@ const Navbar = () => {
             )}
           </Formik>
         </label>
-      </label>
+      </label> */}
     </nav>
   );
 };

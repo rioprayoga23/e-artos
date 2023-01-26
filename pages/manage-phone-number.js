@@ -5,9 +5,10 @@ import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import YupPassword from "yup-password";
 import "yup-phone";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import http from "../helpers/http";
 import Router from "next/router";
+import { getProfileAction } from "../redux/action/profile";
 
 YupPassword(Yup); // extend yup
 
@@ -18,22 +19,28 @@ const editPhoneSchema = Yup.object().shape({
 });
 
 const ManagePhoneNumber = () => {
-  const [message, setMessage] = useState("");
-
   const token = useSelector((state) => state.auth.token);
+
+  const [message, setMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const dispatch = useDispatch();
 
   const editPhone = async (value) => {
     const form = new URLSearchParams({
       phoneNumber: value.phoneNumber,
     });
-
     try {
+      setIsLoading(true);
       const { data } = await http(token).post("/profile/phone-number", form);
       setMessage(data.message);
+      setIsLoading(false);
+      await dispatch(getProfileAction());
       setTimeout(() => {
         Router.push("/profile");
+        setMessage("");
       }, 2000);
     } catch (error) {
+      setIsLoading(false);
       setMessage(error.response.data.message);
     }
   };
@@ -92,7 +99,7 @@ const ManagePhoneNumber = () => {
                       touched.phoneNumber &&
                       "border-purple-500"
                     }`}
-                    placeholder="+62 896785545778"
+                    placeholder="Write your phone number"
                   />
                 </div>
                 {errors.phoneNumber && touched.phoneNumber && (
@@ -105,8 +112,10 @@ const ManagePhoneNumber = () => {
 
                 <button
                   type="submit"
-                  disabled={!dirty}
-                  className="btn bg-primary hover:bg-primary mt-14 w-full"
+                  disabled={!dirty || isLoading}
+                  className={`btn bg-primary hover:bg-primary mt-14 w-full ${
+                    isLoading && "loading"
+                  }`}
                 >
                   Edit Phone Number
                 </button>

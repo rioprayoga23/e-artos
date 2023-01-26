@@ -36,7 +36,9 @@ const ChangePassword = () => {
   const [type, setType] = useState("password");
   const [type2, setType2] = useState("password");
   const [type3, setType3] = useState("password");
+
   const [message, setMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const showPassword = () => {
     type === "password" ? setType("text") : setType("password");
@@ -58,12 +60,16 @@ const ChangePassword = () => {
     });
 
     try {
+      setIsLoading(true);
       const { data } = await http(token).post("/profile/change-password", form);
       setMessage(data.message);
+      setIsLoading(false);
       setTimeout(() => {
         Router.push("/profile");
+        setMessage("");
       }, 2000);
     } catch (error) {
+      setIsLoading(false);
       setMessage(error.response.data.message);
     }
   };
@@ -78,7 +84,50 @@ const ChangePassword = () => {
             twice.
           </p>
         </div>
+
         <div className="flex flex-col px-48 pb-20 md:px-0 xl:px-20">
+          <div className="mt-5">
+            {message &&
+              (message !== "Data updated!" ? (
+                <div className="alert alert-error shadow-lg w-[100%]">
+                  <div>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="stroke-current flex-shrink-0 h-6 w-6"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+                      />
+                    </svg>
+                    <span>{message}</span>
+                  </div>
+                </div>
+              ) : (
+                <div className="alert alert-success shadow-lg w-[100%]">
+                  <div>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="stroke-current flex-shrink-0 h-6 w-6"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+                      />
+                    </svg>
+                    <span>{message}</span>
+                  </div>
+                </div>
+              ))}
+          </div>
           <Formik
             initialValues={{
               currentPassword: "",
@@ -204,24 +253,12 @@ const ChangePassword = () => {
                   </label>
                 )}
 
-                {message !== "Data updated!" ? (
-                  <div className="text-center mt-10">
-                    <p className="text-base font-semibold text-red-500">
-                      {message}
-                    </p>
-                  </div>
-                ) : (
-                  <div className="text-center mt-10">
-                    <p className="text-base font-semibold text-green-500">
-                      {message}
-                    </p>
-                  </div>
-                )}
-
                 <button
                   type="submit"
-                  disabled={!dirty}
-                  className="btn bg-primary w-full mt-10 hover:bg-primary"
+                  disabled={!dirty || isLoading}
+                  className={`btn bg-primary w-full mt-10 hover:bg-primary ${
+                    isLoading && "loading"
+                  }`}
                 >
                   Change Password
                 </button>

@@ -10,9 +10,10 @@ import { useDispatch, useSelector } from "react-redux";
 
 import * as Yup from "yup";
 import YupPassword from "yup-password";
+import WithNoAuth from "../components/HOC/WithNoAuth";
 YupPassword(Yup); // extend yup
 
-const LoginSchema = Yup.object().shape({
+const registerSchema = Yup.object().shape({
   firstName: Yup.string().required("Required"),
   lastName: Yup.string().required("Required"),
   email: Yup.string().email("Invalid email").required("Required"),
@@ -26,10 +27,12 @@ const LoginSchema = Yup.object().shape({
     .required("Required"),
 });
 
-export default function SignUp() {
+const SignUp = () => {
+  const { isLoading } = useSelector((state) => state.auth);
+  const { messageRegister } = useSelector((state) => state.auth);
+
   const dispatch = useDispatch();
-  const isLoading = useSelector((state) => state.auth.isLoading);
-  const message = useSelector((state) => state.auth.message);
+
   const [type, setType] = useState("password");
   const router = useRouter();
 
@@ -38,7 +41,6 @@ export default function SignUp() {
   };
 
   const cb = () => {
-    console.log("Register berhasil");
     router.push("/pin");
   };
 
@@ -49,8 +51,8 @@ export default function SignUp() {
   return (
     <MainLayoutAuth title="SignUp">
       <>
-        <article className="flex w-[40%] md:w-full md:px-0 lg:w-full">
-          <div className="px-20 py-20 md:px-9 lg:px-24 xl:py-10 h-screen overflow-y-scroll lg:h-auto lg:overflow-auto">
+        <article className="w-[40%] md:w-full md:px-0 lg:w-full h-screen items-center">
+          <div className="px-20 py-20 md:px-9 lg:px-24 xl:py-10 h-full overflow-y-scroll items-center justify-center">
             <h1 className="text-2xl font-semibold mb-6 hidden lg:block">
               Sign Up
             </h1>
@@ -70,7 +72,7 @@ export default function SignUp() {
                 email: "",
                 password: "",
               }}
-              validationSchema={LoginSchema}
+              validationSchema={registerSchema}
               onSubmit={(value) => doRegister(value)}
             >
               {({ errors, touched, dirty }) => (
@@ -182,18 +184,20 @@ export default function SignUp() {
                     </Link>
                   </div>
 
-                  {message && (
+                  {messageRegister && (
                     <div className="text-center mt-10">
                       <p className="text-base font-semibold text-red-500">
-                        {message}
+                        {messageRegister}
                       </p>
                     </div>
                   )}
 
                   <button
                     type="submit"
-                    disabled={!dirty || !isLoading}
-                    className="btn bg-primary w-full mt-10 hover:bg-primary"
+                    disabled={!dirty || isLoading}
+                    className={`btn bg-primary w-full mt-10 hover:bg-primary ${
+                      isLoading && "loading"
+                    }`}
                   >
                     Sign Up
                   </button>
@@ -212,4 +216,6 @@ export default function SignUp() {
       </>
     </MainLayoutAuth>
   );
-}
+};
+
+export default SignUp;

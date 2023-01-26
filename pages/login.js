@@ -9,22 +9,21 @@ import { loginAction } from "../redux/action/auth";
 
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
-import YupPassword from "yup-password";
-
-YupPassword(Yup); // extend yup
+import WithNoAuth from "../components/HOC/WithNoAuth";
 
 const LoginSchema = Yup.object().shape({
   email: Yup.string().email("Invalid email").required("Required"),
   password: Yup.string().required("Required"),
 });
 
-export default function Login() {
+const Login = () => {
   const dispatch = useDispatch();
-  const isLoading = useSelector((state) => state.auth.isLoading);
-  const message = useSelector((state) => state.auth.message);
-  const router = useRouter();
+  const { isLoading } = useSelector((state) => state.auth);
+  const { messageLogin } = useSelector((state) => state.auth);
 
   const [type, setType] = useState("password");
+
+  const router = useRouter();
 
   const showPassword = () => {
     type === "password" ? setType("text") : setType("password");
@@ -41,7 +40,7 @@ export default function Login() {
   return (
     <MainLayoutAuth title="Login">
       <>
-        <article className="flex w-[40%] md:w-full lg:w-full h-screen overflow-y-scroll">
+        <article className="flex w-[40%] md:w-full lg:w-full h-screen overflow-y-scroll md:items-start items-center">
           <div className="px-20 pt-10 md:px-9 lg:px-24 xl:pt-6">
             <h1 className="text-2xl font-semibold mb-6 hidden lg:block">
               Login
@@ -126,18 +125,20 @@ export default function Login() {
                     </Link>
                   </div>
 
-                  {message && (
+                  {messageLogin && (
                     <div className="text-center mt-10">
                       <p className="text-base font-semibold text-red-500">
-                        {message}
+                        {messageLogin}
                       </p>
                     </div>
                   )}
 
                   <button
                     type="submit"
-                    disabled={!dirty || !isLoading}
-                    className="btn bg-primary w-full mt-10 hover:bg-primary"
+                    disabled={!dirty || isLoading}
+                    className={`btn bg-primary w-full mt-10 hover:bg-primary ${
+                      isLoading && "loading"
+                    }`}
                   >
                     Login
                   </button>
@@ -156,4 +157,5 @@ export default function Login() {
       </>
     </MainLayoutAuth>
   );
-}
+};
+export default WithNoAuth(Login);
