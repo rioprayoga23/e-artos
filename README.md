@@ -1,4 +1,4 @@
-# TiketKu
+# E-Artos
 ![2](https://user-images.githubusercontent.com/105056679/216290890-6e8dcad6-4224-4762-a9b5-9d694b135646.png)
 
 # About Project
