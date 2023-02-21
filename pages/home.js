@@ -23,14 +23,13 @@ const topUpSchema = Yup.object().shape({
     ),
 });
 
-const HomePage = ({ transactionsData }) => {
-  console.log(transactionsData);
+const HomePage = () => {
   const token = useSelector((state) => state.auth.token);
   const { id } = useSelector((state) => state.profile);
   const { balance } = useSelector((state) => state.profile);
   const { phoneNumber } = useSelector((state) => state.profile);
 
-  // const [transactionsData, setTransactionsData] = useState([]);
+  const [transactionsData, setTransactionsData] = useState([]);
   const [message, setMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
@@ -53,13 +52,13 @@ const HomePage = ({ transactionsData }) => {
     }
   };
 
-  // useEffect(() => {
-  //   const getTransactions = async () => {
-  //     const { data } = await http(token).get("/transactions?page=1&limit=5");
-  //     setTransactionsData(data.results);
-  //   };
-  //   getTransactions();
-  // }, [token, balance]);
+  useEffect(() => {
+    const getTransactions = async () => {
+      const { data } = await http(token).get("/transactions?page=1&limit=5");
+      setTransactionsData(data.results);
+    };
+    getTransactions();
+  }, [token, balance]);
 
   return (
     <MainLayout>
@@ -329,12 +328,12 @@ const HomePage = ({ transactionsData }) => {
   );
 };
 
-export async function getServerSideProps(context) {
-  const { token } = context.req.cookies;
-  const { data } = await http(token).get("/transactions");
-  return {
-    props: { transactionsData: data.results },
-  };
-}
+// export async function getServerSideProps(context) {
+//   const { token } = context.req.cookies;
+//   const { data } = await http(token).get("/transactions");
+//   return {
+//     props: { transactionsData: data.results },
+//   };
+// }
 
 export default WithAuth(HomePage);
