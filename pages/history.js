@@ -43,7 +43,7 @@ const History = () => {
 
   return (
     <MainLayout>
-      <div className="bg-white p-5 rounded-lg shadow-md w-full">
+      <div className="bg-white p-5 rounded-lg shadow-md w-full h-[500px]">
         <div className="flex justify-between mb-10 md:flex md:flex-col md:gap-5">
           <h3 className="font-semibold">Transaction History</h3>
           <div className="dropdown dropdown-end">

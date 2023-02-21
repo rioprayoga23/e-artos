@@ -60,7 +60,7 @@ const MainLayout = ({ children }) => {
   };
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col h-screen">
       <div className="flex-grow bg-third">
         <Navbar />
         <main className="px-24 flex py-10 lg:px-9 3xl:px-[450px] gap-5 md:px-5">
